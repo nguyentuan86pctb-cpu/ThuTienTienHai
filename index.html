@@ -555,6 +555,14 @@ async function taiDuLieuDuNo() {
             if (noteMoi !== null) { luuGhiChu(maKH, noteMoi); let trGoc = $(this).closest('tr').prev(); if (noteMoi.trim() !== '') trGoc.addClass('co-ghi-chu'); else trGoc.removeClass('co-ghi-chu'); let row = dataTableDuNo.row(trGoc); if(row.child.isShown()) { row.child.hide(); trGoc.removeClass('bg-blue-50/50'); trGoc.find('.btn-mo-rong').html(`<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>XEM`).removeClass('bg-evnBlue text-white').addClass('bg-white text-evnBlue'); } dataTableDuNo.draw(false); }
         });
 
+        $('#bang-duno tbody').off('click', '.btn-chia-se').on('click', '.btn-chia-se', function() {
+            let ma = $(this).data('makh'), ten = $(this).data('ten'), tram = $(this).data('tram'), cot = $(this).data('cot'); let note = dictGhiChu[String(ma)] || 'Không có ghi chú gì thêm.';
+            let msg = `[ĐIỆN LỰC VŨ THƯ]\nYêu cầu cập nhật thông tin Khách hàng:\n- Tên KH: ${ten}\n- Mã KH: ${ma}\n- Trạm: ${tram} | Cột: ${cot}\n- Ghi chú/Yêu cầu: ${note}\n\n(Nhờ anh em trên hệ thống kiểm tra và cập nhật giúp)`;
+            let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (navigator.share && isMobile) { navigator.share({ title: 'Cập nhật thông tin KH ' + ten, text: msg }).catch((error) => console.log('Lỗi chia sẻ:', error)); } 
+            else { navigator.clipboard.writeText(msg).then(() => { alert('✅ ĐÃ COPY NỘI DUNG BÁO CÁO!\n\nHệ thống sẽ mở app Zalo trên máy tính. Sếp chỉ cần chọn người/nhóm và bấm Dán (Ctrl+V) nhé.'); window.location.href = "zalo://"; }).catch(err => { alert('Lỗi Copy. Sếp copy thủ công nhé!'); }); }
+        });
+
         // HÀM LỌC CHUNG CHO BẢNG DƯ NỢ VÀ BẢNG IN
         $.fn.dataTable.ext.search.length = 0;
         
