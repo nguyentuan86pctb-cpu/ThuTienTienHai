@@ -19,6 +19,44 @@ const LOGIN_USERS_URLS = [
     `users.json?t=${Date.now()}`
 ];
 
+const GOOGLE_FORM_LOG_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdx9VBBiAn3-Iqtv73uynuHIXpV-irrf82QlAi3epPrOYCuPQ/formResponse';
+const GOOGLE_FORM_LOG_FIELDS = {
+    ten_thungan: 'entry.1514106188',
+    thoi_gian: 'entry.2143059216',
+    dia_chi_ip: 'entry.1036300363',
+    trinh_duyet: 'entry.222639509',
+    ket_qua: 'entry.182080115'
+};
+
+async function layDiaChiIpDangNhap() {
+    try {
+        const res = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Khong lay duoc IP');
+        const data = await res.json();
+        return data.ip || 'Khong xac dinh';
+    } catch (err) {
+        return 'Khong xac dinh';
+    }
+}
+
+async function ghiLogDangNhap(tenThuNgan, ketQua) {
+    try {
+        const ip = await layDiaChiIpDangNhap();
+        const formData = new FormData();
+        formData.append(GOOGLE_FORM_LOG_FIELDS.ten_thungan, tenThuNgan || 'Khong nhap');
+        formData.append(GOOGLE_FORM_LOG_FIELDS.thoi_gian, new Date().toLocaleString('vi-VN'));
+        formData.append(GOOGLE_FORM_LOG_FIELDS.dia_chi_ip, ip);
+        formData.append(GOOGLE_FORM_LOG_FIELDS.trinh_duyet, navigator.userAgent || 'Khong xac dinh');
+        formData.append(GOOGLE_FORM_LOG_FIELDS.ket_qua, ketQua);
+        await fetch(GOOGLE_FORM_LOG_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+        });
+    } catch (err) {
+        console.warn('Khong ghi duoc log dang nhap:', err);
+    }
+}
 async function sha256Text(text) {
     const data = new TextEncoder().encode(text);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -66,15 +104,18 @@ async function dangNhapWeb(event) {
         const passHash = await sha256Text(password);
         const user = users.find(u => String(u.username || '').toLowerCase() === username.toLowerCase() && u.pass_hash === passHash);
         if (!user) {
+            ghiLogDangNhap(username, 'SAI MAT KHAU');
             hienThongBaoDangNhap('Sai ten dang nhap hoac mat khau. Sep kiem tra lai nhe.');
             return;
         }
         currentUser = { username: user.username, ho_ten: user.ho_ten || user.username };
+        ghiLogDangNhap(currentUser.username + ' - ' + currentUser.ho_ten, 'THANH CONG');
         if (remember) localStorage.setItem('evn_duno_current_user', JSON.stringify(currentUser));
         else sessionStorage.setItem('evn_duno_current_user', JSON.stringify(currentUser));
         hienThiWebSauDangNhap();
     } catch (err) {
         console.error(err);
+        ghiLogDangNhap(username, 'LOI DOC USERS.JSON');
         hienThongBaoDangNhap('Chua doc duoc users.json. Sep kiem tra file users.json da duoc dua len web chua.');
     } finally {
         btn.disabled = false;
