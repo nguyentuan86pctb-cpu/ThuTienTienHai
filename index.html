@@ -10,6 +10,106 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.4.1/css/rowGroup.dataTables.min.css">
 
     <script>
+
+// === DANG NHAP THEO users.json ===
+let currentUser = null;
+const LOGIN_USERS_URLS = [
+    `https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/users.json?t=${Date.now()}`,
+    `../users.json?t=${Date.now()}`,
+    `users.json?t=${Date.now()}`
+];
+
+async function sha256Text(text) {
+    const data = new TextEncoder().encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function hienThongBaoDangNhap(noiDung, loai = 'loi') {
+    const box = document.getElementById('login-thong-bao');
+    if (!box) return;
+    box.textContent = noiDung;
+    box.className = loai === 'ok'
+        ? 'rounded-lg px-3 py-2 text-sm font-bold bg-green-50 text-green-700 border border-green-200'
+        : 'rounded-lg px-3 py-2 text-sm font-bold bg-red-50 text-red-700 border border-red-200';
+}
+
+async function taiDanhSachUserDangNhap() {
+    let loiCuoi = null;
+    for (const url of LOGIN_USERS_URLS) {
+        try {
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) throw new Error(`Khong doc duoc ${url}`);
+            const data = await res.json();
+            if (Array.isArray(data.users)) return data.users;
+        } catch (err) {
+            loiCuoi = err;
+        }
+    }
+    throw loiCuoi || new Error('Khong doc duoc users.json');
+}
+
+async function dangNhapWeb(event) {
+    event.preventDefault();
+    const btn = document.getElementById('btn-dang-nhap');
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    const remember = document.getElementById('login-remember').checked;
+    if (!username || !password) {
+        hienThongBaoDangNhap('Sep vui long nhap du ten dang nhap va mat khau.');
+        return;
+    }
+    try {
+        btn.disabled = true;
+        btn.textContent = 'Dang kiem tra...';
+        const users = await taiDanhSachUserDangNhap();
+        const passHash = await sha256Text(password);
+        const user = users.find(u => String(u.username || '').toLowerCase() === username.toLowerCase() && u.pass_hash === passHash);
+        if (!user) {
+            hienThongBaoDangNhap('Sai ten dang nhap hoac mat khau. Sep kiem tra lai nhe.');
+            return;
+        }
+        currentUser = { username: user.username, ho_ten: user.ho_ten || user.username };
+        if (remember) localStorage.setItem('evn_duno_current_user', JSON.stringify(currentUser));
+        else sessionStorage.setItem('evn_duno_current_user', JSON.stringify(currentUser));
+        hienThiWebSauDangNhap();
+    } catch (err) {
+        console.error(err);
+        hienThongBaoDangNhap('Chua doc duoc users.json. Sep kiem tra file users.json da duoc dua len web chua.');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Dang nhap';
+    }
+}
+
+function hienThiWebSauDangNhap() {
+    const manHinh = document.getElementById('man-hinh-dang-nhap');
+    if (manHinh) manHinh.classList.add('hidden');
+    const header = document.querySelector('header');
+    if (header && !document.getElementById('thong-tin-dang-nhap')) {
+        const userBox = document.createElement('div');
+        userBox.id = 'thong-tin-dang-nhap';
+        userBox.className = 'absolute right-2 md:right-4 top-2 md:top-3 flex items-center gap-2 text-[10px] md:text-xs font-bold text-slate-600';
+        userBox.innerHTML = `<span class="hidden sm:inline">${currentUser.ho_ten}</span><button onclick="dangXuatWeb()" class="bg-slate-100 hover:bg-red-50 hover:text-red-600 border border-slate-300 rounded px-2 py-1">Thoat</button>`;
+        header.appendChild(userBox);
+    }
+    if (!dataTableDuNo) taiDuLieuDuNo();
+}
+
+function dangXuatWeb() {
+    sessionStorage.removeItem('evn_duno_current_user');
+    localStorage.removeItem('evn_duno_current_user');
+    location.reload();
+}
+
+function khoiDongDangNhap() {
+    try {
+        currentUser = JSON.parse(sessionStorage.getItem('evn_duno_current_user') || localStorage.getItem('evn_duno_current_user') || 'null');
+    } catch (err) {
+        currentUser = null;
+    }
+    if (currentUser) hienThiWebSauDangNhap();
+}
         tailwind.config = {
             theme: {
                 extend: {
@@ -75,6 +175,32 @@
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex h-screen overflow-hidden">
+<!-- MAN HINH DANG NHAP: chi them lop khoa ngoai, khong thay doi cac tab dang chay -->
+<div id="man-hinh-dang-nhap" class="fixed inset-0 z-[10000] bg-slate-900/90 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-evnBlue to-evnDark px-6 py-5 text-white">
+            <div class="text-2xl font-black tracking-tight">EVNNPC</div>
+            <div class="text-sm font-bold text-orange-200 uppercase mt-1">Dang nhap Bao cao du no</div>
+        </div>
+        <form onsubmit="dangNhapWeb(event)" class="p-6 flex flex-col gap-4">
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-1">Ten dang nhap</label>
+                <input id="login-username" autocomplete="username" class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-evnBlue focus:ring-2 focus:ring-blue-100" placeholder="Vi du: LinhBD3" required>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-1">Mat khau</label>
+                <input id="login-password" type="password" autocomplete="current-password" class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-evnBlue focus:ring-2 focus:ring-blue-100" placeholder="Nhap mat khau" required>
+            </div>
+            <label class="flex items-center gap-2 text-sm text-slate-600 font-semibold cursor-pointer">
+                <input id="login-remember" type="checkbox" class="w-4 h-4 accent-evnBlue">
+                Ghi nho dang nhap tren may nay
+            </label>
+            <div id="login-thong-bao" class="hidden rounded-lg px-3 py-2 text-sm font-bold"></div>
+            <button id="btn-dang-nhap" type="submit" class="bg-evnBlue hover:bg-evnDark text-white font-black rounded-lg px-4 py-3 transition-colors uppercase shadow-md">Dang nhap</button>
+            <p class="text-xs text-slate-500 leading-relaxed">Tai khoan lay theo file users.json. Neu quen mat khau, sep mo tool QuanLyUser.py de cap lai mat khau moi.</p>
+        </form>
+    </div>
+</div>
 
 <div id="banner-nhac-bai" class="hidden fixed top-0 left-0 w-full bg-yellow-300 border-b-4 border-yellow-500 shadow-2xl z-[9999] p-3 md:p-4 justify-between items-center animate-[slideDown_0.3s_ease-out]">
     <div class="flex-1">
@@ -429,7 +555,7 @@ function kiemTraAnCot(tenCot) { return COT_CAN_AN.some(an => tenCot.toLowerCase(
 
 async function taiDuLieuDuNo() {
     try {
-        const res = await fetch(`https://raw.githubusercontent.com/nguyentuan86pctb-cpu/BaoCaoTienHai/main/data_duno.json?t=${Date.now()}`);
+        const res = await fetch(`https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/data_duno.json?t=${Date.now()}`);
         if (!res.ok) throw new Error("Chưa có data_duno.json trên Github sếp ơi!");
         const json = await res.json();
         let rawRecords = json.du_lieu || [];
@@ -791,7 +917,7 @@ $('#bang-tong-hop').on('click', '.btn-xem-tnv', function() { let tnv = $(this).d
 
 // Khởi chạy ngay khi mở web
 setupChuKyIn();
-taiDuLieuDuNo(); 
+khoiDongDangNhap(); 
 // Đã tắt chế độ tự động load mỗi 60 giây: setInterval(taiDuLieuDuNo, 60000);
 kiemTraNgayKhoa();
 </script>
