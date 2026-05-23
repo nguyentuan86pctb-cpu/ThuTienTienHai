@@ -1,0 +1,17 @@
+{
+  "short_name": "EVN Tiền Hải",
+  "name": "EVNNPC - Điện lực Tiền Hải Dashboard",
+  "description": "Hệ thống quản lý dư nợ Điện lực Tiền Hải",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/users.json?logo=evn",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#002B54",
+  "theme_color": "#002B54",
+  "display": "standalone",
+  "orientation": "portrait"
+}
