@@ -2,16 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>EVNNPC - Điện lực Tiền Hải Dashboard</title>
-    
-    <!-- Cấu hình hiển thị Full màn hình như App chuyên nghiệp trên điện thoại -->
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-    <meta name="apple-mobile-web-app-title" content="EVN Tiền Hải"/>
-    <meta name="mobile-web-app-capable" content="yes"/>
-    <meta name="theme-color" content="#002B54"/>
-    <link rel="manifest" href="manifest.json"/>
     
     <!-- Tailwind CSS & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -216,12 +208,11 @@
         .dataTables_wrapper .dataTables_filter input { 
             border: 1px solid #e2e8f0; 
             border-radius: 8px; 
-            padding: 8px 14px; 
+            padding: 6px 12px; 
             outline: none; 
             margin-bottom: 12px; 
             margin-left: 8px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
             transition: all 0.2s;
         }
         .dataTables_wrapper .dataTables_filter input:focus {
@@ -231,10 +222,9 @@
         .dataTables_wrapper .dataTables_length select { 
             border: 1px solid #e2e8f0; 
             border-radius: 8px; 
-            padding: 8px; 
+            padding: 6px; 
             margin: 0 4px; 
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
             outline: none;
         }
         
@@ -249,11 +239,11 @@
             border-bottom: 2px solid #0054A6 !important; 
             background: linear-gradient(135deg, #0054A6, #002B54) !important; 
             color: #fff !important; 
-            font-weight: 800 !important; 
-            font-size: 13px !important;
+            font-weight: 700 !important; 
+            font-size: 11px !important;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            padding: 14px 12px !important;
+            padding: 12px 10px !important;
         }
         table.dataTable tbody tr {
             background-color: #ffffff;
@@ -280,9 +270,9 @@
             transition: background-color 0.2s;
             opacity: 0.85;
         }
-        tr.da-doc-no td div.text-slate-900 {
+        tr.da-doc-no td div.text-evnDark {
             text-decoration: line-through;
-            color: #64748b !important;
+            color: #64748b;
         }
         tr.duoc-chon-in td { 
             background-color: #f3e8ff !important; /* Soft Purple */
@@ -291,7 +281,7 @@
         } 
 
         #bang-duno th, #bang-duno td, #bang-in-tb th, #bang-in-tb td { 
-            padding: 8px 10px !important; 
+            padding: 10px 12px !important; 
             border-bottom: 1px solid #f1f5f9;
         }
 
@@ -307,7 +297,7 @@
             border-top: 1px solid #cbd5e1 !important; 
             border-bottom: 1px solid #cbd5e1 !important; 
             text-transform: uppercase; 
-            font-size: 13px; 
+            font-size: 12px; 
             letter-spacing: 0.05em;
         }
         #bang-tong-hop tfoot th { 
@@ -315,7 +305,7 @@
             border-top: 3px solid #0054A6 !important; 
             font-weight: 800 !important; 
             color: #002B54; 
-            font-size: 14px; 
+            font-size: 13px; 
             padding: 14px 16px !important; 
         }
 
@@ -371,13 +361,13 @@
             <div>
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Tên đăng nhập</label>
                 <div class="relative">
-                    <input id="login-username" autocomplete="username" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-evnBlue focus:ring-4 focus:ring-blue-100 transition-all font-bold text-slate-700 text-sm" placeholder="Ví dụ: LinhBD3" required>
+                    <input id="login-username" autocomplete="username" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-evnBlue focus:ring-4 focus:ring-blue-100 transition-all font-semibold text-slate-700" placeholder="Ví dụ: LinhBD3" required>
                 </div>
             </div>
             <div>
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Mật khẩu</label>
                 <div class="relative">
-                    <input id="login-password" type="password" autocomplete="current-password" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-evnBlue focus:ring-4 focus:ring-blue-100 transition-all font-bold text-slate-700 text-sm" placeholder="Nhập mật khẩu" required>
+                    <input id="login-password" type="password" autocomplete="current-password" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-evnBlue focus:ring-4 focus:ring-blue-100 transition-all font-semibold text-slate-700" placeholder="Nhập mật khẩu" required>
                 </div>
             </div>
             <label class="flex items-center gap-2.5 text-xs text-slate-600 font-bold cursor-pointer select-none py-1">
@@ -389,7 +379,7 @@
                 Đăng nhập
             </button>
             <p class="text-[11px] text-slate-400 leading-relaxed text-center mt-2 border-t border-slate-100 pt-3">
-                Nếu quên mật khẩu, Liên Hệ Mr.Tuấn 0919089886 để cấp lại.
+                Tài khoản lấy theo file <b>users.json</b>.<br>Nếu quên mật khẩu, sếp mở tool <b>QuanLyUser.py</b> để cấp lại.
             </p>
         </form>
     </div>
@@ -405,7 +395,7 @@
         </div>
         <div>
             <p class="text-[10px] font-extrabold text-amber-800 uppercase tracking-widest mb-0.5">Đang gọi nhắc nợ:</p>
-            <div id="banner-ten" class="font-black text-xl text-slate-900 leading-tight">NGUYỄN VĂN A</div>
+            <div id="banner-ten" class="font-black text-lg text-slate-900 leading-tight">NGUYỄN VĂN A</div>
             <div class="font-extrabold text-sm text-rose-700 mt-0.5">Số tiền nợ: <span id="banner-tien" class="text-base font-black text-rose-800">0</span></div>
         </div>
     </div>
@@ -442,11 +432,11 @@
 <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 flex shadow-[0_-5px_15px_rgba(0,0,0,0.06)] z-50">
     <a id="btn-bot-du-no" onclick="chuyenTab('du-no')" class="flex-1 py-3 flex flex-col items-center justify-center text-evnBlue border-t-2 border-evnBlue bg-blue-50/40 transition-all">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span class="text-[11px] font-bold mt-1 uppercase tracking-wider">Dư nợ</span>
+        <span class="text-[10px] font-bold mt-1 uppercase tracking-wider">Dư nợ</span>
     </a>
     <a id="btn-bot-tong-hop" onclick="chuyenTab('tong-hop')" class="flex-1 py-3 flex flex-col items-center justify-center text-slate-500 border-t-2 border-transparent transition-all">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 2v-6m10 10V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2z"></path></svg>
-        <span class="text-[11px] font-bold mt-1 uppercase tracking-wider">Tổng hợp</span>
+        <span class="text-[10px] font-bold mt-1 uppercase tracking-wider">Tổng hợp</span>
     </a>
 </nav>
 
@@ -454,28 +444,31 @@
 <div class="flex-1 flex flex-col md:ml-[260px] h-full w-full overflow-hidden">
     
     <!-- HEADER -->
-    <header class="bg-white border-b border-slate-200/80 shadow-sm flex justify-center items-center h-16 px-4 md:px-6 sticky top-0 z-30 shrink-0 relative">
-        <h1 class="text-[15px] md:text-2xl font-black text-evnBlue tracking-tight uppercase text-center">
-            Tổng Hợp Báo Cáo Điện Lực Tiền Hải
-        </h1>
-        <!-- Profile & Đăng xuất nằm tuyệt đối bên phải giống Vũ Thư -->
-        <div id="user-profile-box" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 flex items-center">
+    <header class="bg-white border-b border-slate-200/80 shadow-sm flex justify-between items-center h-16 px-4 md:px-6 sticky top-0 z-30 shrink-0">
+        <div class="flex items-center gap-3">
+            <span class="md:hidden text-xl font-black text-evnBlue">EVN</span>
+            <h1 class="text-sm md:text-lg font-black text-evnBlue tracking-tight uppercase border-l-4 border-evnOrange pl-2.5">
+                Tổng Hợp Báo Cáo Điện Lực Tiền Hải
+            </h1>
+        </div>
+        <!-- Profile & Đăng xuất -->
+        <div id="user-profile-box" class="flex items-center">
             <!-- Nút đăng xuất sẽ tự chèn ở đây sau khi đăng nhập thành công -->
         </div>
     </header>
 
     <!-- PHẦN NỘI DUNG CHÍNH (MAIN SCREEN) -->
-    <main class="flex-1 overflow-y-auto p-1.5 md:p-6 bg-slate-50/50">
-        <div class="max-w-[1600px] mx-auto flex flex-col gap-4 md:gap-6 pb-20 md:pb-6 font-sans">
+    <main class="flex-1 overflow-y-auto p-3 md:p-6 bg-slate-50/50">
+        <div class="max-w-[1600px] mx-auto flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
             
             <!-- TAB 1: BÁO CÁO DƯ NỢ -->
             <div id="tab-du-no" class="block">
-                <section class="glass-card rounded-2xl shadow-xl p-2.5 md:p-6 flex flex-col gap-4">
+                <section class="glass-card rounded-2xl shadow-xl p-4 md:p-6 flex flex-col gap-5">
                     
                     <!-- Bảng tiêu đề & Nút thao tác -->
                     <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 border-b border-slate-100 pb-5">
                         <div>
-                            <h2 class="text-base md:text-xl font-bold text-slate-800 flex items-center gap-2 uppercase font-sans">
+                            <h2 class="text-base md:text-xl font-bold text-slate-800 flex items-center gap-2 uppercase">
                                 <span class="w-2.5 h-6 bg-evnOrange rounded-full inline-block"></span>
                                 Báo cáo Dư nợ Khách hàng
                             </h2>
@@ -489,17 +482,17 @@
                             </select>
                             
                             <button onclick="taiDuLieuDuNo()" class="bg-white text-slate-700 border border-slate-200 font-bold px-3 py-2.5 rounded-xl shadow-sm hover:bg-slate-50 hover:text-evnBlue transition-all flex items-center gap-1.5 text-xs md:text-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> 
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> 
                                 Làm mới
                             </button>
                             
                             <button id="btn-xuat-excel" onclick="xuatExcelTheoDieuKien()" class="bg-emerald-600 text-white border border-emerald-700 font-bold px-3 py-2.5 rounded-xl shadow-sm hover:bg-emerald-700 transition-all flex items-center gap-1.5 text-xs md:text-sm opacity-50 cursor-not-allowed pointer-events-none">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> 
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> 
                                 Xuất Excel
                             </button>
                             
                             <button id="btn-in-duno" onclick="inBaoCaoDuNo()" class="bg-evnBlue text-white border border-evnDark font-bold px-3 py-2.5 rounded-xl shadow-sm hover:bg-blue-800 transition-all flex items-center gap-1.5 text-xs md:text-sm opacity-50 cursor-not-allowed pointer-events-none">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 00-2 2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> 
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 00-2 2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> 
                                 In Báo Cáo
                             </button>
                             
@@ -553,7 +546,7 @@
                     </div>
 
                     <!-- VÙNG HIỂN THỊ BẢNG DƯ NỢ -->
-                    <div id="vung-in-duno" class="border border-slate-100 rounded-2xl shadow-sm bg-white/70 p-1 md:p-2 overflow-hidden w-full">
+                    <div id="vung-in-duno" class="border border-slate-100 rounded-2xl shadow-sm bg-white/70 p-2 overflow-hidden">
                         <div id="in-header" class="text-center pb-4">
                             <div class="font-black text-lg uppercase">ĐIỆN LỰC TIỀN HẢI — EVNNPC</div>
                             <div class="font-bold text-base uppercase mt-1">BÁO CÁO DƯ NỢ KHÁCH HÀNG</div>
@@ -561,7 +554,6 @@
                             <div id="in-ngay" class="text-xs text-gray-500 italic mt-1"></div>
                         </div>
                         
-                        <!-- overflow-x-auto: Cho phép cuộn ngang mượt mà trên di động để chữ không bị co kéo -->
                         <div class="overflow-x-auto w-full">
                             <table id="bang-duno" class="w-full text-left border-collapse stripe hover row-border cursor-default" style="width:100%"></table>
                         </div>
@@ -664,7 +656,7 @@
                     </div>
 
                     <!-- Bảng in danh sách -->
-                    <div class="overflow-x-hidden w-full border border-slate-100 rounded-2xl shadow-sm bg-white p-2">
+                    <div class="overflow-x-auto w-full border border-slate-100 rounded-2xl shadow-sm bg-white p-2">
                         <table id="bang-in-tb" class="w-full text-left border-collapse stripe hover row-border cursor-default" style="width:100%"></table>
                     </div>
                 </section>
@@ -968,33 +960,22 @@ async function taiDuLieuDuNo() {
             return { data: k, visible: false };
         });
 
-        // 2 CỘT DUY NHẤT VỚI KÍCH THƯỚC CHỮ SIÊU TO - CỰC KỲ RÕ NÉT VÀ KHÔNG BỊ TRÀN
         finalColumnsGlobal = [
             {
                 data: null, 
-                title: `
-                    <div class="flex flex-col items-center justify-center gap-1">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Đốc</span>
-                        <input type="checkbox" class="chk-master-doc w-5.5 h-5.5 cursor-pointer accent-evnOrange rounded" title="Chọn tất cả / Bỏ chọn">
-                    </div>`, 
-                orderable: false, 
-                searchable: false, 
-                className: 'text-center w-10 md:w-12 align-middle py-2',
+                title: `<div class="flex flex-col items-center justify-center gap-1"><span class="text-[9px] font-black uppercase text-slate-500">Đọc</span><input type="checkbox" class="chk-master-doc w-4.5 h-4.5 cursor-pointer accent-evnOrange rounded" title="Chọn tất cả"></div>`, 
+                orderable: false, searchable: false, className: 'text-center w-10 align-middle',
                 render: function(data, type, row) { 
                     let maKH = cotMaKH ? row[cotMaKH] : null; 
                     if (type === 'display') { 
                         let isChecked = danhSachTickCache.has(String(maKH)) ? 'checked' : ''; 
-                        return `<input type="checkbox" data-makh="${maKH}" class="chk-doc-no w-5.5 h-5.5 cursor-pointer accent-green-600 rounded animate-[pulse_1.5s_infinite]" ${isChecked}>`; 
+                        return `<input type="checkbox" data-makh="${maKH}" class="chk-doc-no w-4.5 h-4.5 cursor-pointer accent-emerald-600 rounded" ${isChecked}>`; 
                     } 
                     return maKH; 
                 }
             },
             {
-                data: null, 
-                title: '<span class="text-[12px] font-black uppercase tracking-wider text-slate-500">Khách Hàng</span>', 
-                orderable: true, 
-                searchable: false, 
-                className: 'align-middle py-2',
+                data: null, title: 'KHÁCH HÀNG', orderable: true, searchable: false, className: 'align-middle py-3',
                 render: function(data, type, row) {
                     let ten = cotTenKH && row[cotTenKH] ? row[cotTenKH] : '--';
                     if (type === 'display') {
@@ -1002,28 +983,22 @@ async function taiDuLieuDuNo() {
                         let tram = cotTram_global && row[cotTram_global] ? row[cotTram_global] : '--'; 
                         let cot = cotCot_global && row[cotCot_global] ? String(row[cotCot_global]).replace(/\.0$/, '').trim() : '--'; 
                         let myNote = dictGhiChu[String(ma)] || ''; 
-                        let noteHtml = myNote ? `<div class="text-[11px] bg-rose-600 text-white px-2 py-0.5 rounded-md inline-block mt-1 border border-rose-700 shadow-sm font-bold animate-bounce">📌 ${myNote}</div>` : '';
+                        let noteHtml = myNote ? `<div class="text-[11px] bg-rose-600 text-white px-2 py-0.5 rounded-md inline-flex items-center gap-1 mt-1.5 border border-rose-700 shadow-sm font-bold">📌 ${myNote}</div>` : '';
                         return `
-                            <div class="min-w-0">
-                                <div class="text-slate-900 font-extrabold text-[16px] md:text-[18px] leading-snug whitespace-normal break-words">${ten}</div>
-                                <div class="text-[12px] md:text-[13px] text-slate-500 font-bold mt-1.5 whitespace-normal">
-                                    Mã: <span class="text-slate-700 font-semibold">${ma}</span> 
-                                    <span class="mx-1 text-slate-200">|</span> Trạm: <span class="text-evnBlue font-bold">${tram}</span> 
-                                    <span class="mx-1.5 text-slate-200">|</span> Cột: <span class="text-slate-700 font-semibold">${cot}</span>
-                                </div>
-                                ${noteHtml}
+                            <div class="text-evnDark font-bold text-[15px] leading-snug whitespace-normal max-w-[240px] md:max-w-xs">${ten}</div>
+                            <div class="text-[11px] text-slate-400 font-medium mt-1 whitespace-normal">
+                                Mã: <span class="font-bold text-slate-600">${ma}</span> 
+                                <span class="mx-1.5 text-slate-200">|</span> Trạm: <span class="font-bold text-evnBlue">${tram}</span> 
+                                <span class="mx-1.5 text-slate-200">|</span> Cột: <span class="font-bold text-slate-600">${cot}</span>
                             </div>
+                            ${noteHtml}
                         `;
                     }
                     return ten; 
                 }
             },
             {
-                data: null, 
-                title: '<span class="text-[12px] font-black uppercase tracking-wider text-slate-500">Thanh Toán</span>', 
-                orderable: true, 
-                searchable: false, 
-                className: 'align-middle py-2 w-44',
+                data: null, title: 'SỐ TIỀN NỢ', orderable: true, searchable: false, className: 'align-middle py-3',
                 render: function(data, type, row) {
                     let tien = cotTien_global && row[cotTien_global] ? row[cotTien_global] : '0';
                     if (type === 'display') {
@@ -1035,10 +1010,10 @@ async function taiDuLieuDuNo() {
                         } else { 
                             sdtClean = ''; 
                         }
-                        let htmlTien = `<div class="text-rose-600 font-black text-[15px] md:text-[17px]">${tien} đ</div>`;
+                        let htmlTien = `<div class="text-rose-600 font-extrabold text-[14px] md:text-[15px]">${tien} đ</div>`;
                         let htmlSdt = sdtClean 
-                            ? `<a href="tel:${sdtClean}" data-ten="${tenKH.replace(/"/g, '&quot;')}" data-tien="${tien}" class="btn-goi-dien text-[12px] text-evnBlue font-bold inline-flex items-center gap-1 mt-1.5 bg-blue-50 border border-blue-100 hover:bg-orange-500 hover:text-white hover:border-orange-600 px-2.5 py-1.5 rounded-xl transition-all shadow-sm"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>${sdtClean}</a>` 
-                            : `<div class="text-[11px] text-slate-400 mt-1.5 italic font-bold">Chưa có SĐT</div>`;
+                            ? `<a href="tel:${sdtClean}" data-ten="${tenKH.replace(/"/g, '&quot;')}" data-tien="${tien}" class="btn-goi-dien text-[12px] text-evnBlue font-bold inline-flex items-center gap-1 mt-1.5 bg-blue-50 border border-blue-100 hover:bg-orange-500 hover:text-white hover:border-orange-600 px-2 py-1 rounded-lg transition-all"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>${sdtClean}</a>` 
+                            : `<div class="text-[11px] text-slate-400 mt-1 italic font-medium">Chưa có SĐT</div>`;
                         return htmlTien + htmlSdt;
                     }
                     if (type === 'sort' || type === 'type') {
@@ -1048,13 +1023,9 @@ async function taiDuLieuDuNo() {
                 }
             },
             {
-                data: null, 
-                title: '<span class="text-[12px] font-black uppercase tracking-wider text-slate-500">Chi Tiết</span>', 
-                orderable: false, 
-                searchable: false, 
-                className: 'text-center w-16 align-middle py-2',
+                data: null, title: 'CHI TIẾT', orderable: false, searchable: false, className: 'text-center w-20 align-middle',
                 render: function() { 
-                    return `<button class="btn-mo-rong bg-white border border-evnBlue text-evnBlue px-2.5 py-1.5 rounded-xl text-[12px] font-bold hover:bg-evnBlue hover:text-white transition-colors w-full flex justify-center items-center gap-1 shadow-sm"><svg class="w-3.5 h-3.5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>XEM</button>`; 
+                    return `<button class="btn-mo-rong bg-white border border-slate-200 hover:border-evnBlue text-evnBlue px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all w-full flex justify-center items-center gap-1 shadow-sm"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>XEM</button>`; 
                 }
             },
             ...cotAnSearch
@@ -1066,9 +1037,9 @@ async function taiDuLieuDuNo() {
             pageLength: 50, 
             lengthMenu: [[50, 100, 200, 500], [50, 100, 200, 1000]],
             language: { 
-                search: "Tìm nhanh:", 
+                search: "Tìm kiếm nhanh:", 
                 lengthMenu: "Hiện _MENU_ dòng", 
-                info: "Khách hàng _START_ – _END_ / Tổng số _TOTAL_", 
+                info: "Khách hàng từ _START_ – _END_ / Tổng số _TOTAL_", 
                 zeroRecords: "Không tìm thấy khách hàng nào phù hợp sếp ơi!", 
                 paginate: { next: "Sau »", previous: "« Trước" } 
             },
@@ -1078,12 +1049,11 @@ async function taiDuLieuDuNo() {
                 if (dictGhiChu[maStr]) $(row).addClass('co-ghi-chu'); 
                 if (danhSachTickCache.has(maStr)) $(row).addClass('da-doc-no'); 
             },
-            scrollX: true, 
+            scrollX: false, 
             autoWidth: false, 
             dom: '<"flex flex-col md:flex-row md:justify-between items-center mb-3 gap-3"lf>rt<"flex flex-col md:flex-row md:justify-between items-center mt-3 gap-3"ip>'
         });
 
-        // Cột ẩn bắt đầu từ index 4 (với 4 cột hiển thị là index 0, 1, 2, 3)
         $('#sort-tram').off('change').on('change', function() { 
             if ($(this).is(':checked')) { 
                 $('#sort-cot').prop('checked', false); 
@@ -1174,22 +1144,20 @@ async function taiDuLieuDuNo() {
             document.getElementById('banner-nhac-bai').classList.add('flex'); 
         });
 
-        $('#bang-duno tbody, #bang-in-tb tbody').off('click', '.btn-mo-rong').on('click', '.btn-mo-rong', function () {
+        $('#bang-duno tbody').off('click', '.btn-mo-rong').on('click', '.btn-mo-rong', function () {
             let tr = $(this).closest('tr'); 
-            let tableId = $(this).closest('table').attr('id');
-            let currentTable = (tableId === 'bang-in-tb') ? dataTableInTB : dataTableDuNo;
-            let row = currentTable.row(tr);
+            let row = dataTableDuNo.row(tr);
             if (row.child.isShown()) { 
                 row.child.hide(); 
                 tr.removeClass('bg-blue-50/40'); 
-                $(this).html(`<svg class="w-3.5 h-3.5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>XEM`);
-                $(this).removeClass('bg-evnBlue text-white').addClass('bg-white text-evnBlue');
+                $(this).html(`<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg> XEM`); 
+                $(this).removeClass('bg-evnBlue text-white border-evnBlue').addClass('bg-white text-evnBlue border-slate-200'); 
             } else {
                 let data = row.data(); 
                 let cacCotDaCoTruocMat = [cotTenKH, cotMaKH, cotTram_global, cotTien_global, cotSDT_global]; 
-                let dsCotHienChiTiet = mangCotHoanChinh.filter(k => !cacCotDaCoTruocMat.includes(k) && !kiemTraAnCot(k)); 
+                let dsCotHienChiTiet = keys.filter(k => !cacCotDaCoTruocMat.includes(k) && !kiemTraAnCot(k)); 
                 
-                let detailHtml = '<div class="p-4 bg-gradient-to-r from-blue-50/60 to-slate-50 border border-blue-100 shadow-inner grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs md:text-sm rounded-xl">';
+                let detailHtml = '<div class="p-4 bg-gradient-to-r from-blue-50/60 to-slate-50 border-y border-blue-100 shadow-inner grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs md:text-sm rounded-xl">';
                 dsCotHienChiTiet.forEach(k => { 
                     let val = data[k] !== null && data[k] !== undefined && data[k] !== '' ? data[k] : '--'; 
                     detailHtml += `
@@ -1201,7 +1169,7 @@ async function taiDuLieuDuNo() {
                 });
                 
                 detailHtml += `
-                    <div class="col-span-full flex flex-col sm:flex-row gap-3 mt-4 pt-4 border-t border-blue-200/60">
+                    <div class="col-span-full flex flex-col md:flex-row gap-3 mt-4 pt-4 border-t border-blue-200/60">
                         <button class="btn-ghi-chu flex-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 font-bold py-2.5 rounded-xl shadow-sm text-xs transition-colors flex justify-center items-center gap-1.5" data-makh="${data[cotMaKH]}">
                             📌 Ghi chú khách hàng
                         </button>
@@ -1213,31 +1181,28 @@ async function taiDuLieuDuNo() {
                 
                 row.child(detailHtml).show(); 
                 tr.addClass('bg-blue-50/40'); 
-                $(this).html(`<svg class="w-3.5 h-3.5 transform transition-transform duration-200 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>ĐÓNG`);
-                $(this).removeClass('bg-white text-evnBlue').addClass('bg-evnBlue text-white');
+                $(this).html(`<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg> ĐÓNG`); 
+                $(this).removeClass('bg-white text-evnBlue border-slate-200').addClass('bg-evnBlue text-white border-evnBlue');
             }
         });
 
-        $('#bang-duno tbody, #bang-in-tb tbody').off('click', '.btn-ghi-chu').on('click', '.btn-ghi-chu', function() {
-            let tr = $(this).closest('tr');
-            let tableId = $(this).closest('table').attr('id');
-            let currentTable = (tableId === 'bang-in-tb') ? dataTableInTB : dataTableDuNo;
+        $('#bang-duno tbody').off('click', '.btn-ghi-chu').on('click', '.btn-ghi-chu', function() {
             let maKH = $(this).data('makh'); 
             let noteCu = dictGhiChu[String(maKH)] || ''; 
             let noteMoi = prompt('📝 GHI CHÚ CHO KHÁCH HÀNG MÃ ' + maKH + '\n(Để trống và bấm OK nếu muốn xóa ghi chú cũ):', noteCu);
             
             if (noteMoi !== null) { 
                 luuGhiChu(maKH, noteMoi); 
-                let trGoc = tr.prev(); 
+                let trGoc = $(this).closest('tr').prev(); 
                 if (noteMoi.trim() !== '') trGoc.addClass('co-ghi-chu'); else trGoc.removeClass('co-ghi-chu'); 
                 
-                let row = currentTable.row(trGoc); 
+                let row = dataTableDuNo.row(trGoc); 
                 if (row.child.isShown()) { 
                     row.child.hide(); 
                     trGoc.removeClass('bg-blue-50/40'); 
-                    trGoc.find('.btn-mo-rong').html(`<svg class="w-3.5 h-3.5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>XEM`).removeClass('bg-evnBlue text-white').addClass('bg-white text-evnBlue');
+                    trGoc.find('.btn-mo-rong').html(`<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg> XEM`).removeClass('bg-evnBlue text-white border-evnBlue').addClass('bg-white text-evnBlue border-slate-200'); 
                 } 
-                currentTable.draw(false); 
+                dataTableDuNo.draw(false); 
             }
         });
 
@@ -1317,18 +1282,12 @@ function khoiTaoBangInTB() {
     let columnsInTB = [...finalColumnsGlobal];
     columnsInTB[0] = {
         data: null, 
-        title: `
-            <div class="flex flex-col items-center justify-center gap-1">
-                <span class="text-[10px] font-bold text-purple-700 uppercase tracking-wider">Chọn in</span>
-                <input type="checkbox" id="chk-master-in" class="w-5.5 h-5.5 cursor-pointer accent-purple-600 rounded" title="Chọn tất cả danh sách đang lọc">
-            </div>`, 
-        orderable: false, 
-        searchable: false, 
-        className: 'text-center w-10 md:w-12 align-middle py-2',
+        title: `<div class="flex flex-col items-center justify-center gap-1"><span class="text-[9px] font-black uppercase text-purple-700">Chọn in</span><input type="checkbox" id="chk-master-in" class="w-4.5 h-4.5 cursor-pointer accent-purple-600 rounded" title="Chọn tất cả danh sách đang lọc"></div>`, 
+        orderable: false, searchable: false, className: 'text-center w-10 align-middle',
         render: function(data, type, row) { 
             let maKH = cotMaKH ? row[cotMaKH] : null; 
             if (type === 'display') { 
-                return `<input type="checkbox" data-makh="${maKH}" class="chk-in-no w-5.5 h-5.5 cursor-pointer accent-purple-600 rounded animate-[pulse_1.5s_infinite]">`; 
+                return `<input type="checkbox" data-makh="${maKH}" class="chk-in-no w-4.5 h-4.5 cursor-pointer accent-purple-600 rounded">`; 
             } 
             return maKH; 
         }
@@ -1340,13 +1299,13 @@ function khoiTaoBangInTB() {
         pageLength: 50, 
         lengthMenu: [[50, 100, 200, 500], [50, 100, 200, 1000]],
         language: { 
-            search: "Tìm nhanh:", 
+            search: "Tìm kiếm nhanh:", 
             lengthMenu: "Hiện _MENU_ dòng", 
-            info: "Khách hàng _START_ – _END_ / Tổng số _TOTAL_", 
+            info: "Khách hàng từ _START_ – _END_ / Tổng số _TOTAL_", 
             zeroRecords: "Không tìm thấy khách hàng nào để in sếp ơi!", 
             paginate: { next: "Sau »", previous: "« Trước" } 
         },
-        scrollX: true, 
+        scrollX: false, 
         autoWidth: false, 
         dom: '<"flex flex-col md:flex-row md:justify-between items-center mb-3 gap-3"lf>rt<"flex flex-col md:flex-row md:justify-between items-center mt-3 gap-3"ip>'
     });
