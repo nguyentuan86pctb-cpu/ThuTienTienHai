@@ -592,7 +592,33 @@ $.fn.dataTable.ext.type.order['natural-asc'] = function (a, b) { return String(a
 $.fn.dataTable.ext.type.order['natural-desc'] = function (a, b) { return String(b).localeCompare(String(a), undefined, {numeric: true, sensitivity: 'base'}); };
 
 const COT_CAN_AN = ['Ä‘á»‹a chá»‰', 'dia chi', 'thu ngÃ¢n', 'thu ngan', 'tnv', 'thu ngÃ¢n viÃªn', 'ká»³', 'thÃ¡ng', 'nÄƒm', 'ká»³ thÃ¡ng nÄƒm', 'ky thang nam', 'loáº¡i hÃ³a Ä‘Æ¡n', 'loai hoa don', 'ngÃ y phÃ¡t hÃ nh', 'ngay phat hanh'];
-function kiemTraAnCot(tenCot) { return COT_CAN_AN.some(an => tenCot.toLowerCase().trim().includes(an)); }
+function boDauTenCot(value) {
+    return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .toLowerCase()
+        .trim();
+}
+
+function timCotTheoTuKhoa(keys, keywords) {
+    const tuKhoaChuan = keywords.map(boDauTenCot);
+    return keys.find(k => {
+        const kChuan = boDauTenCot(k);
+        return tuKhoaChuan.some(tu => kChuan.includes(tu));
+    });
+}
+
+function docGiaTriTheoCot(row, keywords) {
+    const key = timCotTheoTuKhoa(Object.keys(row || {}), keywords);
+    return key ? row[key] : '';
+}
+
+function kiemTraAnCot(tenCot) {
+    const tenCotChuan = boDauTenCot(tenCot);
+    return COT_CAN_AN.some(an => tenCotChuan.includes(boDauTenCot(an)));
+}
 
 async function taiDuLieuDuNo() {
     try {
@@ -601,9 +627,11 @@ async function taiDuLieuDuNo() {
         const json = await res.json();
         let rawRecords = json.du_lieu || [];
         const records = rawRecords.filter(r => {
-            let ma = String(r['MÃ£ khÃ¡ch hÃ ng'] || '').trim(); let ten = String(r['TÃªn khÃ¡ch hÃ ng'] || '').trim();
+            let ma = String(docGiaTriTheoCot(r, ['ma khach hang', 'ma kh']) || '').trim();
+            let ten = String(docGiaTriTheoCot(r, ['ten khach hang', 'ten kh']) || '').trim();
             if (!ma) return false; 
-            if (ten.includes('KÃ½, há» tÃªn') || ten.includes('Thu ngÃ¢n viÃªn') || ten.includes('PhÃ²ng kinh doanh') || ten.includes('Káº¿ toÃ¡n')) return false;
+            const tenChuan = boDauTenCot(ten);
+            if (tenChuan.includes('ky, ho ten') || tenChuan.includes('thu ngan vien') || tenChuan.includes('phong kinh doanh') || tenChuan.includes('ke toan')) return false;
             return true;
         });
 
@@ -615,13 +643,13 @@ async function taiDuLieuDuNo() {
         khoiTaoCacheTick();
 
         const keys = Object.keys(records[0]);
-        cotTNV_global  = keys.find(k => k.toLowerCase().includes('thu ngÃ¢n') || k.toLowerCase().includes('tnv') || k.toLowerCase().includes('thu ngan'));
-        cotTien_global = keys.find(k => k.toLowerCase().includes('tá»•ng tiá»n') || k.toLowerCase().includes('tong tien') || k.toLowerCase().includes('ná»£'));
-        cotTram_global = keys.find(k => k.toLowerCase().includes('tráº¡m') || k.toLowerCase().includes('tram'));
-        cotCot_global  = keys.find(k => k.toLowerCase().includes('cá»™t') || k.toLowerCase().includes('cot'));
-        cotSDT_global  = keys.find(k => k.toLowerCase().includes('sdt') || k.toLowerCase().includes('Ä‘iá»‡n thoáº¡i') || k.toLowerCase().includes('Ä‘t'));
-        cotMaKH    = keys.find(k => k.toLowerCase().includes('mÃ£ kh') || k.toLowerCase().includes('ma kh'));
-        cotTenKH   = keys.find(k => k.toLowerCase().includes('tÃªn kh') || k.toLowerCase().includes('ten kh'));
+        cotTNV_global  = timCotTheoTuKhoa(keys, ['thu ngan vien', 'thu ngan', 'tnv']);
+        cotTien_global = timCotTheoTuKhoa(keys, ['tong tien', 'so tien', 'no']);
+        cotTram_global = timCotTheoTuKhoa(keys, ['ten tram', 'tram']);
+        cotCot_global  = timCotTheoTuKhoa(keys, ['so cot', 'cot']);
+        cotSDT_global  = timCotTheoTuKhoa(keys, ['so dien thoai', 'dien thoai', 'sdt', 'dt']);
+        cotMaKH        = timCotTheoTuKhoa(keys, ['ma khach hang', 'ma kh']);
+        cotTenKH       = timCotTheoTuKhoa(keys, ['ten khach hang', 'ten kh']);
 
         if (cotTNV_global) {
             const listTNV = [...new Set(records.map(r => r[cotTNV_global]))].filter(Boolean).sort();
@@ -889,14 +917,18 @@ function inThongBaoTienDien() {
     
     recordsToPrint.forEach(rowData => { 
         let cleanSo = (val) => val ? String(val).replace(/\.0$/, '').trim() : ''; 
-        let rawSdt = rowData['SÃ´ Ä‘iá»‡n thoáº¡i'] || rowData['Sá»‘ Ä‘iá»‡n thoáº¡i']; 
+        let rawSdt = cotSDT_global ? rowData[cotSDT_global] : docGiaTriTheoCot(rowData, ['so dien thoai', 'dien thoai', 'sdt', 'dt']); 
         let sdtClean = rawSdt ? String(rawSdt).replace(/\.0$/, '').trim() : ''; 
         if (sdtClean && sdtClean !== 'NaN' && sdtClean !== 'null') { if (!sdtClean.startsWith('0')) sdtClean = '0' + sdtClean; } else { sdtClean = 'ChÆ°a cÃ³ SÄT'; } 
         
         let pData = { 
-            ten: rowData['TÃªn khÃ¡ch hÃ ng'] || '--', maKH: rowData['MÃ£ khÃ¡ch hÃ ng'] || '--', diaChi: rowData['Äá»‹a chá»‰ khÃ¡ch hÃ ng'] || '--', 
-            tram: rowData['TÃªn Tráº¡m'] || '--', cot: cleanSo(rowData['SÃ´ Cá»™t'] || rowData['Sá»‘ Cá»™t']) || '--', cto: cleanSo(rowData['SÃ´ CTÆ¡'] || rowData['Sá»‘ CTÆ¡']) || '--', 
-            sdt: sdtClean, tien: rowData['Tá»•ng tiá»n'] || '0',
+            ten: (cotTenKH ? rowData[cotTenKH] : docGiaTriTheoCot(rowData, ['ten khach hang', 'ten kh'])) || '--',
+            maKH: (cotMaKH ? rowData[cotMaKH] : docGiaTriTheoCot(rowData, ['ma khach hang', 'ma kh'])) || '--',
+            diaChi: docGiaTriTheoCot(rowData, ['dia chi khach hang', 'dia chi']) || '--', 
+            tram: (cotTram_global ? rowData[cotTram_global] : docGiaTriTheoCot(rowData, ['ten tram', 'tram'])) || '--',
+            cot: cleanSo(cotCot_global ? rowData[cotCot_global] : docGiaTriTheoCot(rowData, ['so cot', 'cot'])) || '--',
+            cto: cleanSo(docGiaTriTheoCot(rowData, ['so cto', 'so cong to', 'cto'])) || '--', 
+            sdt: sdtClean, tien: (cotTien_global ? rowData[cotTien_global] : docGiaTriTheoCot(rowData, ['tong tien', 'so tien', 'no'])) || '0',
             nguoiGui: nguoiGui, lanhDao: lanhDao, tieuDeLanhDao: tieuDeLanhDao,
             ngayCat: strNgayCat,
             ngayHetHan: strNgayHetHan
