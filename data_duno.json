@@ -1,8 +1,8 @@
 {
   "profile": "tien_hai",
   "web_app": "https://thu-tien-tien-hai.vercel.app/",
-  "cap_nhat_luc": "29/05/2026 16:33:13",
-  "tong_so_kh": 107,
+  "cap_nhat_luc": "29/05/2026 17:03:14",
+  "tong_so_kh": 108,
   "du_lieu": [
     {
       "Mã Sổ GCS": "",
@@ -53,15 +53,31 @@
       "Tên Trạm": ""
     },
     {
+      "Mã Sổ GCS": 3111,
+      "ID hóa đơn": 1772017602.0,
+      "Mã khách hàng": "PA09030314706",
+      "Tên khách hàng": "Trần  Văn Loan",
+      "Địa chỉ khách hàng": "Thôn Lưu Phương,  Xã Ái Quốc, Tỉnh Hưng Yên, Việt Nam\t",
+      "Kỳ-tháng/năm": "1-5/2026",
+      "Loại hóa đơn": "TD",
+      "Ngày phát hành": "29-05-2026 00:00:00",
+      "Tổng tiền": 285.833,
+      "Số điện thoại": 976702632.0,
+      "Thu ngân viên": "BĐ tư gia xã Tây Phong",
+      "Số CTơ": 2310279091.0,
+      "Số Cột": "1.12/1.1",
+      "Tên Trạm": "Tây Phong 2"
+    },
+    {
       "Mã Sổ GCS": "",
       "ID hóa đơn": "",
       "Mã khách hàng": "",
       "Tên khách hàng": "",
       "Địa chỉ khách hàng": "",
-      "Kỳ-tháng/năm": "Số hóa đơn: 0 HĐ",
+      "Kỳ-tháng/năm": "Số hóa đơn: 1 HĐ",
       "Loại hóa đơn": "",
       "Ngày phát hành": "",
-      "Tổng tiền": 0.0,
+      "Tổng tiền": 285.833,
       "Số điện thoại": "",
       "Thu ngân viên": "",
       "Số CTơ": "",
