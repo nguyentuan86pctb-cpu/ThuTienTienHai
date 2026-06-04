@@ -398,11 +398,32 @@
 
             #filter-tnv + button,
             #filter-tnv + button + button,
-            #filter-tnv + button + button + button,
-            #filter-tnv + button + button + button + button {
+            #filter-tnv + button + button + button {
                 flex: 1 1 calc(50% - 6px);
                 justify-content: center;
                 min-width: 0;
+            }
+
+            #btn-mo-khoa {
+                flex: 0 0 48px !important;
+                width: 48px !important;
+                height: 44px !important;
+                min-width: 48px !important;
+                max-width: 48px !important;
+                padding: 0 !important;
+                align-self: stretch;
+            }
+
+            #btn-mo-khoa svg {
+                width: 22px !important;
+                height: 22px !important;
+                max-width: 22px !important;
+                max-height: 22px !important;
+            }
+
+            #btn-in-duno {
+                flex: 1 1 calc(100% - 58px) !important;
+                justify-content: center;
             }
 
             #thong-ke-duno {
@@ -455,10 +476,24 @@
                 border-radius: 10px;
             }
 
+            #bang-duno tbody tr:has(td[colspan]),
+            #bang-in-tb tbody tr:has(td[colspan]) {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                grid-template-columns: none !important;
+                grid-template-areas: none !important;
+                border-radius: 10px;
+            }
+
             #bang-duno tbody tr.child td,
             #bang-in-tb tbody tr.child td,
             #bang-duno tbody tr.child td:nth-child(1),
-            #bang-in-tb tbody tr.child td:nth-child(1) {
+            #bang-in-tb tbody tr.child td:nth-child(1),
+            #bang-duno tbody tr td[colspan],
+            #bang-in-tb tbody tr td[colspan],
+            #bang-duno tbody tr td[colspan]:nth-child(1),
+            #bang-in-tb tbody tr td[colspan]:nth-child(1) {
                 display: block !important;
                 width: 100% !important;
                 max-width: 100% !important;
@@ -469,7 +504,9 @@
             }
 
             #bang-duno tbody tr.child td > div,
-            #bang-in-tb tbody tr.child td > div {
+            #bang-in-tb tbody tr.child td > div,
+            #bang-duno tbody tr td[colspan] > div,
+            #bang-in-tb tbody tr td[colspan] > div {
                 display: grid !important;
                 grid-template-columns: 1fr !important;
                 width: 100% !important;
