@@ -388,6 +388,23 @@
                 box-sizing: border-box;
             }
 
+            #filter-tnv,
+            #filter-tnv-in {
+                display: block !important;
+                flex: 1 0 100% !important;
+                flex-basis: 100% !important;
+                min-width: 100% !important;
+            }
+
+            #filter-tnv + button,
+            #filter-tnv + button + button,
+            #filter-tnv + button + button + button,
+            #filter-tnv + button + button + button + button {
+                flex: 1 1 calc(50% - 6px);
+                justify-content: center;
+                min-width: 0;
+            }
+
             #thong-ke-duno {
                 padding: 10px 8px !important;
                 gap: 8px !important;
@@ -434,7 +451,34 @@
             #bang-duno tbody tr.child,
             #bang-in-tb tbody tr.child {
                 display: block;
+                width: 100% !important;
                 border-radius: 10px;
+            }
+
+            #bang-duno tbody tr.child td,
+            #bang-in-tb tbody tr.child td,
+            #bang-duno tbody tr.child td:nth-child(1),
+            #bang-in-tb tbody tr.child td:nth-child(1) {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                grid-area: auto !important;
+                text-align: left !important;
+                padding: 0 !important;
+                border: 0 !important;
+            }
+
+            #bang-duno tbody tr.child td > div,
+            #bang-in-tb tbody tr.child td > div {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 10px !important;
+                border-radius: 10px !important;
+                box-sizing: border-box;
+                overflow-wrap: anywhere;
+                word-break: break-word;
             }
 
             #bang-duno tbody td,
