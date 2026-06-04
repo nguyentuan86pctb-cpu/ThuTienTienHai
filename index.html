@@ -317,6 +317,219 @@
             border: 1px solid rgba(226, 232, 240, 0.7);
         }
 
+        @media (max-width: 767px) {
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden !important;
+            }
+
+            body {
+                height: 100svh;
+            }
+
+            header,
+            main,
+            section,
+            .glass-card,
+            .dataTables_wrapper,
+            #vung-in-duno,
+            #tab-du-no,
+            #tab-in-tb,
+            #tab-tong-hop {
+                max-width: 100%;
+                min-width: 0;
+            }
+
+            main {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+
+            .glass-card {
+                padding: 10px !important;
+                border-radius: 12px !important;
+            }
+
+            .overflow-x-auto {
+                overflow-x: hidden !important;
+            }
+
+            .dataTables_wrapper {
+                overflow-x: hidden !important;
+            }
+
+            .dataTables_wrapper .dataTables_length,
+            .dataTables_wrapper .dataTables_filter,
+            .dataTables_wrapper .dataTables_info,
+            .dataTables_wrapper .dataTables_paginate {
+                float: none !important;
+                width: 100%;
+                max-width: 100%;
+                text-align: left !important;
+            }
+
+            .dataTables_wrapper .dataTables_filter label {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                width: 100%;
+                font-size: 12px;
+                font-weight: 800;
+            }
+
+            .dataTables_wrapper .dataTables_filter input,
+            .dataTables_wrapper .dataTables_length select,
+            #filter-tnv,
+            #filter-tnv-in {
+                width: 100% !important;
+                max-width: 100%;
+                margin-left: 0 !important;
+                box-sizing: border-box;
+            }
+
+            #thong-ke-duno {
+                padding: 10px 8px !important;
+                gap: 8px !important;
+            }
+
+            #bang-duno,
+            #bang-in-tb,
+            #bang-tong-hop {
+                display: block;
+                width: 100% !important;
+                min-width: 0 !important;
+            }
+
+            #bang-duno thead,
+            #bang-in-tb thead,
+            #bang-tong-hop thead,
+            #bang-tong-hop tfoot {
+                display: none;
+            }
+
+            #bang-duno tbody,
+            #bang-in-tb tbody,
+            #bang-tong-hop tbody {
+                display: block;
+                width: 100%;
+            }
+
+            #bang-duno tbody tr,
+            #bang-in-tb tbody tr {
+                display: grid;
+                grid-template-columns: 34px minmax(0, 1fr) minmax(86px, 28%);
+                grid-template-areas:
+                    "chon khach tien"
+                    "xem xem xem";
+                gap: 0;
+                width: 100%;
+                margin-bottom: 8px;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                overflow: hidden;
+                background: #fff;
+            }
+
+            #bang-duno tbody tr.child,
+            #bang-in-tb tbody tr.child {
+                display: block;
+                border-radius: 10px;
+            }
+
+            #bang-duno tbody td,
+            #bang-in-tb tbody td,
+            #bang-tong-hop tbody td {
+                display: block;
+                width: auto !important;
+                max-width: 100%;
+                padding: 7px 6px !important;
+                font-size: 11px !important;
+                white-space: normal !important;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+                border-bottom: 0 !important;
+                box-sizing: border-box;
+                vertical-align: top;
+            }
+
+            #bang-duno tbody td:nth-child(1),
+            #bang-in-tb tbody td:nth-child(1) {
+                grid-area: chon;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #bang-duno tbody td:nth-child(2),
+            #bang-in-tb tbody td:nth-child(2) {
+                grid-area: khach;
+            }
+
+            #bang-duno tbody td:nth-child(3),
+            #bang-in-tb tbody td:nth-child(3) {
+                grid-area: tien;
+                text-align: right;
+            }
+
+            #bang-duno tbody td:nth-child(4),
+            #bang-in-tb tbody td:nth-child(4) {
+                grid-area: xem;
+                border-top: 1px solid #f1f5f9 !important;
+            }
+
+            #bang-duno td div,
+            #bang-in-tb td div,
+            #bang-tong-hop td div {
+                max-width: 100% !important;
+            }
+
+            #bang-duno .btn-mo-rong,
+            #bang-in-tb .btn-mo-rong,
+            #bang-tong-hop .btn-xem-tnv {
+                min-width: 0;
+                width: 100% !important;
+                padding: 7px 6px !important;
+                font-size: 10px !important;
+                gap: 3px !important;
+            }
+
+            #bang-duno .btn-goi-dien,
+            #bang-in-tb .btn-goi-dien {
+                max-width: 100%;
+                padding-left: 5px !important;
+                padding-right: 5px !important;
+                font-size: 11px !important;
+            }
+
+            #bang-tong-hop tbody tr {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(86px, 34%);
+                gap: 0;
+                width: 100%;
+                margin-bottom: 8px;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                overflow: hidden;
+                background: #fff;
+            }
+
+            #bang-tong-hop tbody td {
+                border-bottom: 1px solid #f1f5f9 !important;
+            }
+
+            #bang-tong-hop tbody td:nth-child(1),
+            #bang-tong-hop tbody td:nth-child(2),
+            #bang-tong-hop tbody td:nth-child(6) {
+                grid-column: 1 / -1;
+            }
+
+            .w-max {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
         /* Print Settings */
         @page { size: A4 landscape; margin: 5mm; }
 
@@ -496,7 +709,7 @@
                                 In Báo Cáo
                             </button>
                             
-                            <button id="btn-mo-khoa" onclick="nhapMatKhauMoKhoa()" class="bg-rose-500 text-white border border-rose-600 font-bold px-3 py-2.5 rounded-xl shadow-sm hover:bg-rose-600 transition-all flex items-center justify-center text-xs md:text-sm" title="Nhập mật khẩu mở khóa In/Xuất trước ngày 10">
+                            <button id="btn-mo-khoa" onclick="nhapMatKhauMoKhoa()" class="bg-rose-500 text-white border border-rose-600 font-bold px-3 py-2.5 rounded-xl shadow-sm hover:bg-rose-600 transition-all flex items-center justify-center text-xs md:text-sm" title="In/Xuất tự mở từ ngày 7 hàng tháng">
                                 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                             </button>
                         </div>
@@ -720,7 +933,7 @@
 <script>
 // BIẾN TOÀN CỤC MỚI
 let isDaMoKhoa = false;
-const MAT_KHAU_IN = "123456"; 
+const MAT_KHAU_IN = "024689"; 
 let globalRecords = [];
 let finalColumnsGlobal = [];
 let dataTableInTB = null;
@@ -734,7 +947,7 @@ function kiemTraNgayKhoa() {
     let btnMoKhoa = document.getElementById('btn-mo-khoa');
 
     if (btnExcel && btnIn && btnPhatLenhIn && btnMoKhoa) {
-        if (ngayHienTai >= 10 || isDaMoKhoa) {
+        if (ngayHienTai >= 7 || isDaMoKhoa) {
             btnExcel.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
             btnIn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
             btnPhatLenhIn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
@@ -749,10 +962,10 @@ function kiemTraNgayKhoa() {
 }
 
 function nhapMatKhauMoKhoa() {
-    let mk = prompt("Chưa đến ngày 10 hàng tháng.\nVui lòng nhập mật khẩu để mở khóa tính năng In và Xuất Excel:");
+    let mk = prompt("Chưa đến ngày 7 hàng tháng.\nVui lòng nhập mật khẩu để mở khóa tính năng In và Xuất Excel:");
     if (mk === MAT_KHAU_IN) {
-        isDaMoKhoa = true; 
-        kiemTraNgayKhoa(); 
+        isDaMoKhoa = true;
+        kiemTraNgayKhoa();
         alert("✅ Mở khóa thành công!");
     } else if (mk !== null) {
         alert("❌ Sai mật khẩu sếp ơi!");
