@@ -1557,12 +1557,23 @@ async function taiDuLieuDuNo() {
         capNhatMauSDT();
         
         $('#filter-tnv').off('change').on('change', function() { 
-            if (cotTNV_global) { 
+            if (cotTNV_global && dataTableDuNo) { 
                 const val = $(this).val(); 
-                let idxCotTNV = finalColumnsGlobal.findIndex(c => c.data === cotTNV_global); 
-                if (idxCotTNV > -1) { 
-                    dataTableDuNo.column(idxCotTNV).search(val ? '^' + $.fn.dataTable.util.escapeRegex(val) + '$' : '', true, false).draw(); 
-                } 
+                const duLieuTheoTNV = val
+                    ? globalRecords.filter(r => String(r[cotTNV_global] || '') === String(val))
+                    : globalRecords;
+
+                $('#sort-tram').prop('checked', false);
+                $('#sort-cot').prop('checked', false);
+                $('#sort-sdt').prop('checked', false);
+
+                dataTableDuNo.search('');
+                dataTableDuNo.columns().search('');
+                dataTableDuNo.clear();
+                dataTableDuNo.rows.add(duLieuTheoTNV);
+                dataTableDuNo.order([[1, 'asc']]);
+                dataTableDuNo.page('first');
+                dataTableDuNo.draw();
             } 
         });
     } catch (err) { 
