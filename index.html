@@ -1222,6 +1222,48 @@ function layDuLieuBaoCaoZalo(ma, fallback) {
     };
 }
 
+function copyTextBaoCao(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+    }
+    return new Promise((resolve, reject) => {
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            textarea.style.top = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(textarea);
+            ok ? resolve() : reject(new Error('Khong copy duoc'));
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+function moZaloSauKhiCopy(msg, isMobile) {
+    copyTextBaoCao(msg)
+        .then(() => {
+            alert('ĐÃ COPY NỘI DUNG BÁO CÁO!\n\nHệ thống sẽ mở Zalo. Sếp chọn người/nhóm rồi bấm Dán để gửi.');
+            setTimeout(() => {
+                window.location.href = isMobile ? 'zalo://' : 'zalo://';
+            }, 200);
+        })
+        .catch(() => {
+            if (navigator.share && isMobile) {
+                navigator.share({ title: 'Báo cáo Zalo', text: msg }).catch(() => {
+                    alert('Máy chưa cho copy tự động. Sếp copy thủ công nội dung báo cáo rồi mở Zalo gửi giúp em.');
+                });
+            } else {
+                alert('Lỗi Copy. Sếp copy thủ công nội dung báo cáo rồi mở Zalo gửi giúp em.');
+            }
+        });
+}
+
 async function taiDuLieuDuNo() {
     try {
         const res = await fetch(`https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/data_duno.json?t=${Date.now()}`);
@@ -1539,18 +1581,7 @@ async function taiDuLieuDuNo() {
             let baoCao = layDuLieuBaoCaoZalo(ma, { ten: $(this).data('ten'), tram: $(this).data('tram'), cot: $(this).data('cot') });
             let msg = `[\u0110I\u1EC6N L\u1EF0C TI\u1EC0N H\u1EA2I]\n- T\u00EAn KH: ${baoCao.ten || ''}\n- M\u00E3 KH: ${baoCao.ma || ''}\n- S\u1ED5 GCS: ${baoCao.soGCS || ''}\n- S\u1ED1 \u0110i\u1EC7n Tho\u1EA1i: ${baoCao.sdt || ''}\n- Tr\u1EA1m: ${baoCao.tram || ''} / C\u1ED9t: ${baoCao.cot || ''}\n- S\u1ED1 Ti\u1EC1n N\u1EE3: ${baoCao.tien || ''}\n- Ghi ch\u00FA: ${baoCao.ghiChu || ''}`;
             let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-            
-            if (navigator.share && isMobile) { 
-                navigator.share({ title: 'Cập nhật thông tin KH ' + ten, text: msg }).catch((error) => console.log('Lỗi chia sẻ:', error)); 
-            } else { 
-                navigator.clipboard.writeText(msg).then(() => { 
-                    alert('✅ ĐÃ COPY NỘI DUNG BÁO CÁO!\n\nHệ thống sẽ mở ứng dụng Zalo. Sếp chỉ cần chọn người/nhóm và bấm Dán (Ctrl+V) nhé.'); 
-                    window.location.href = "zalo://"; 
-                }).catch(err => { 
-                    alert('Lỗi Copy. Sếp copy thủ công nhé!'); 
-                }); 
-            }
+            moZaloSauKhiCopy(msg, isMobile);
         });
 
         // HÀM LỌC CHUNG CHO BẢNG DƯ NỢ VÀ BẢNG IN
