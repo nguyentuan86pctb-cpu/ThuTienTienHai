@@ -1246,22 +1246,26 @@ function copyTextBaoCao(text) {
 }
 
 function moZaloSauKhiCopy(msg, isMobile) {
-    copyTextBaoCao(msg)
-        .then(() => {
-            alert('ĐÃ COPY NỘI DUNG BÁO CÁO!\n\nHệ thống sẽ mở Zalo. Sếp chọn người/nhóm rồi bấm Dán để gửi.');
-            setTimeout(() => {
-                window.location.href = isMobile ? 'zalo://' : 'zalo://';
-            }, 200);
-        })
-        .catch(() => {
-            if (navigator.share && isMobile) {
-                navigator.share({ title: 'Báo cáo Zalo', text: msg }).catch(() => {
-                    alert('Máy chưa cho copy tự động. Sếp copy thủ công nội dung báo cáo rồi mở Zalo gửi giúp em.');
-                });
-            } else {
-                alert('Lỗi Copy. Sếp copy thủ công nội dung báo cáo rồi mở Zalo gửi giúp em.');
-            }
-        });
+    copyTextBaoCao(msg).catch(() => {});
+
+    if (isMobile) {
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const fallbackTimer = setTimeout(() => {
+            window.location.href = 'https://chat.zalo.me';
+        }, 1200);
+
+        window.addEventListener('pagehide', () => clearTimeout(fallbackTimer), { once: true });
+
+        if (isAndroid) {
+            window.location.href = 'intent://#Intent;scheme=zalo;package=com.zing.zalo;end';
+        } else {
+            window.location.href = 'zalo://';
+        }
+        return;
+    }
+
+    alert('ĐÃ COPY NỘI DUNG BÁO CÁO!\n\nHệ thống sẽ mở Zalo. Sếp chọn người/nhóm rồi bấm Dán để gửi.');
+    window.location.href = 'zalo://';
 }
 
 async function taiDuLieuDuNo() {
