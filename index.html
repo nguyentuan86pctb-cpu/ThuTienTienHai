@@ -1246,26 +1246,12 @@ function copyTextBaoCao(text) {
 }
 
 function moZaloSauKhiCopy(msg, isMobile) {
-    copyTextBaoCao(msg).catch(() => {});
-
-    if (isMobile) {
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        const fallbackTimer = setTimeout(() => {
-            window.location.href = 'https://chat.zalo.me';
-        }, 1200);
-
-        window.addEventListener('pagehide', () => clearTimeout(fallbackTimer), { once: true });
-
-        if (isAndroid) {
-            window.location.href = 'intent://#Intent;scheme=zalo;package=com.zing.zalo;end';
-        } else {
-            window.location.href = 'zalo://';
-        }
-        return;
-    }
-
-    alert('ĐÃ COPY NỘI DUNG BÁO CÁO!\n\nHệ thống sẽ mở Zalo. Sếp chọn người/nhóm rồi bấm Dán để gửi.');
-    window.location.href = 'zalo://';
+    copyTextBaoCao(msg).then(() => {
+        alert('ĐÃ COPY NỘI DUNG BÁO CÁO!\n\nHệ thống sẽ mở app Zalo trên máy tính. Sếp chỉ cần chọn người/nhóm và bấm Dán (Ctrl+V) nhé.');
+        window.location.href = 'zalo://';
+    }).catch(() => {
+        alert('Lỗi Copy. Sếp copy thủ công nhé!');
+    });
 }
 
 async function taiDuLieuDuNo() {
@@ -1583,9 +1569,14 @@ async function taiDuLieuDuNo() {
         $('#bang-duno tbody').off('click', '.btn-chia-se').on('click', '.btn-chia-se', function() {
             let ma = $(this).data('makh');
             let baoCao = layDuLieuBaoCaoZalo(ma, { ten: $(this).data('ten'), tram: $(this).data('tram'), cot: $(this).data('cot') });
+            let ten = baoCao.ten || $(this).data('ten') || '';
             let msg = `[\u0110I\u1EC6N L\u1EF0C TI\u1EC0N H\u1EA2I]\n- T\u00EAn KH: ${baoCao.ten || ''}\n- M\u00E3 KH: ${baoCao.ma || ''}\n- S\u1ED5 GCS: ${baoCao.soGCS || ''}\n- S\u1ED1 \u0110i\u1EC7n Tho\u1EA1i: ${baoCao.sdt || ''}\n- Tr\u1EA1m: ${baoCao.tram || ''} / C\u1ED9t: ${baoCao.cot || ''}\n- S\u1ED1 Ti\u1EC1n N\u1EE3: ${baoCao.tien || ''}\n- Ghi ch\u00FA: ${baoCao.ghiChu || ''}`;
             let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            moZaloSauKhiCopy(msg, isMobile);
+            if (navigator.share && isMobile) {
+                navigator.share({ title: 'Cập nhật thông tin KH ' + ten, text: msg }).catch((error) => console.log('Lỗi chia sẻ:', error));
+            } else {
+                moZaloSauKhiCopy(msg, isMobile);
+            }
         });
 
         // HÀM LỌC CHUNG CHO BẢNG DƯ NỢ VÀ BẢNG IN
