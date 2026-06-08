@@ -616,7 +616,10 @@
 
         @media print {
             body * { visibility: hidden; }
-            body { padding-bottom: 0 !important; background: #fff !important; }
+            html, body { overflow: visible !important; height: auto !important; width: auto !important; max-width: none !important; }
+            body { padding-bottom: 0 !important; }
+            body > div, main, section, .glass-card { overflow: visible !important; height: auto !important; width: auto !important; max-width: none !important; min-width: 0 !important; margin: 0 !important; padding-left: 0 !important; padding-right: 0 !important; }
+            main > div { max-width: none !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
             #vung-in-duno, #vung-in-duno * { visibility: visible; }
             #vung-in-duno { position: absolute; top: 0; left: 0; width: 100%; }
             #bang-duno_wrapper, #bang-in-tb_wrapper { display: none !important; }
@@ -636,7 +639,7 @@
             .trang-in-a4:last-child { page-break-after: auto; }
             .lien-thong-bao { width: 50%; height: 100%; padding: 6mm 10mm 48mm 10mm; display: block; position: relative; font-size: 12px; box-sizing: border-box; overflow: hidden; }
             .duong-cat-doc { border-left: 1px dashed #666; margin: 0; flex-shrink: 0; position: relative; align-self: stretch; }
-            .duong-cat-doc::after { content: "✂"; position: absolute; top: 50%; left: -9px; font-size: 18px; color: #666; background: #fff; padding: 5px 0; transform: translateY(-50%); }
+            .duong-cat-doc::after { content: "\2702"; position: absolute; top: 50%; left: -9px; font-size: 18px; color: #666; background: #fff; padding: 5px 0; transform: translateY(-50%); }
         }
         #in-header, #vung-bang-in-tang-hinh, #in-dong-tong { display: none; }
     </style>
@@ -840,7 +843,7 @@
                     </div>
 
                     <!-- VÙNG HIỂN THỊ BẢNG DƯ NỢ -->
-                    <div id="vung-in-duno" class="border border-slate-100 rounded-2xl shadow-sm bg-white/70 p-2 overflow-hidden">
+                    <div id="vung-in-duno" class="border border-slate-100 rounded-2xl shadow-sm bg-white/70 p-2">
                         <div id="in-header" class="text-center pb-4">
                             <div class="font-black text-lg uppercase">ĐIỆN LỰC TIỀN HẢI — EVNNPC</div>
                             <div class="font-bold text-base uppercase mt-1">BÁO CÁO DƯ NỢ KHÁCH HÀNG</div>
@@ -1115,12 +1118,8 @@ let danhSachTickCache = new Set();
 let dictGhiChu = {};
 
 function khoiTaoCacheTick() {
-    let homNay = new Date().toLocaleDateString('vi-VN');
     let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    if (data.ngay !== homNay) { 
-        data = { ngay: homNay, dsMaKH: [] }; 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); 
-    }
+    // B?n n?ng c?p: gi? tick ?? ??c n? b?n tr?n m?y, kh?ng t? x?a khi sang ng?y m?i.
     danhSachTickCache = new Set(data.dsMaKH || []);
     dictGhiChu = JSON.parse(localStorage.getItem(STORAGE_NOTE_KEY) || '{}');
 }
@@ -1186,6 +1185,40 @@ function docGiaTriTheoCot(row, keywords) {
 function kiemTraAnCot(tenCot) {
     const tenCotChuan = boDauTenCot(tenCot);
     return COT_CAN_AN.some(an => tenCotChuan.includes(boDauTenCot(an)));
+}
+
+
+function timGiaTriTheoTuKhoa(row, keywords) {
+    if (!row) return '';
+    const keys = Object.keys(row);
+    const tuKhoaChuan = keywords.map(boDauTenCot);
+    const key = keys.find(k => {
+        const kChuan = boDauTenCot(k);
+        return tuKhoaChuan.some(tu => kChuan.includes(tu));
+    });
+    return key ? row[key] : '';
+}
+
+function dinhDangSoDienThoai(value) {
+    let sdt = String(value || '').replace(/\.0$/, '').trim();
+    if (!sdt || sdt === 'NaN' || sdt === 'null' || sdt === '--') return '';
+    if (sdt.length >= 8 && !sdt.startsWith('0')) sdt = '0' + sdt;
+    return sdt;
+}
+
+function layDuLieuBaoCaoZalo(ma, fallback) {
+    const maStr = String(ma || '');
+    const row = (globalRecords || []).find(r => String((cotMaKH && r[cotMaKH]) || timGiaTriTheoTuKhoa(r, ['ma khach hang', 'ma kh'])) === maStr) || {};
+    return {
+        ten: fallback.ten || (cotTenKH ? row[cotTenKH] : '') || timGiaTriTheoTuKhoa(row, ['ten khach hang', 'ten kh']),
+        ma: maStr,
+        soGCS: timGiaTriTheoTuKhoa(row, ['so gcs', 'sogcs', 'so ghi chi so', 'so ghi ch? s?', 'gcs']),
+        sdt: dinhDangSoDienThoai((cotSDT_global ? row[cotSDT_global] : '') || timGiaTriTheoTuKhoa(row, ['so dien thoai', 'dien thoai', 'sdt', 'dt'])),
+        tram: fallback.tram || (cotTram_global ? row[cotTram_global] : '') || timGiaTriTheoTuKhoa(row, ['ten tram', 'tram']),
+        cot: String(fallback.cot || (cotCot_global ? row[cotCot_global] : '') || timGiaTriTheoTuKhoa(row, ['so cot', 'cot'])).replace(/\.0$/, '').trim(),
+        tien: (cotTien_global ? row[cotTien_global] : '') || timGiaTriTheoTuKhoa(row, ['tong tien', 'so tien', 'no']),
+        ghiChu: dictGhiChu[maStr] || ''
+    };
 }
 
 async function taiDuLieuDuNo() {
@@ -1501,10 +1534,11 @@ async function taiDuLieuDuNo() {
         });
 
         $('#bang-duno tbody').off('click', '.btn-chia-se').on('click', '.btn-chia-se', function() {
-            let ma = $(this).data('makh'), ten = $(this).data('ten'), tram = $(this).data('tram'), cot = $(this).data('cot'); 
-            let note = dictGhiChu[String(ma)] || 'Không có ghi chú gì thêm.';
-            let msg = `[ĐIỆN LỰC TIỀN HẢI]\nYêu cầu cập nhật thông tin Khách hàng:\n- Tên KH: ${ten}\n- Mã KH: ${ma}\n- Trạm: ${tram} | Cột: ${cot}\n- Ghi chú/Yêu cầu: ${note}\n\n(Nhờ anh em trên hệ thống kiểm tra và cập nhật giúp)`;
+            let ma = $(this).data('makh');
+            let baoCao = layDuLieuBaoCaoZalo(ma, { ten: $(this).data('ten'), tram: $(this).data('tram'), cot: $(this).data('cot') });
+            let msg = `[\u0110I\u1EC6N L\u1EF0C TI\u1EC0N H\u1EA2I]\n- T\u00EAn KH: ${baoCao.ten || ''}\n- M\u00E3 KH: ${baoCao.ma || ''}\n- S\u1ED5 GCS: ${baoCao.soGCS || ''}\n- S\u1ED1 \u0110i\u1EC7n Tho\u1EA1i: ${baoCao.sdt || ''}\n- Tr\u1EA1m: ${baoCao.tram || ''} / C\u1ED9t: ${baoCao.cot || ''}\n- S\u1ED1 Ti\u1EC1n N\u1EE3: ${baoCao.tien || ''}\n- Ghi ch\u00FA: ${baoCao.ghiChu || ''}`;
             let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
             
             if (navigator.share && isMobile) { 
                 navigator.share({ title: 'Cập nhật thông tin KH ' + ten, text: msg }).catch((error) => console.log('Lỗi chia sẻ:', error)); 
@@ -1556,28 +1590,21 @@ async function taiDuLieuDuNo() {
         capNhatThongKe(); 
         capNhatMauSDT();
         
+        
         $('#filter-tnv').off('change').on('change', function() { 
             if (cotTNV_global && dataTableDuNo) { 
                 const val = $(this).val(); 
-                const duLieuTheoTNV = val
-                    ? globalRecords.filter(r => String(r[cotTNV_global] || '') === String(val))
-                    : globalRecords;
-
+                let idxCotTNV = finalColumnsGlobal.findIndex(c => c.data === cotTNV_global);
+                if (idxCotTNV > -1) {
+                    dataTableDuNo.column(idxCotTNV).search(val ? '^' + $.fn.dataTable.util.escapeRegex(val) + '$' : '', true, false).draw();
+                }
                 $('#sort-tram').prop('checked', false);
                 $('#sort-cot').prop('checked', false);
                 $('#sort-sdt').prop('checked', false);
-
-                dataTableDuNo.search('');
-                dataTableDuNo.columns().search('');
-                dataTableDuNo.clear();
-                dataTableDuNo.rows.add(duLieuTheoTNV);
-                dataTableDuNo.order([[1, 'asc']]);
-                dataTableDuNo.page('first');
-                dataTableDuNo.draw();
             } 
         });
     } catch (err) { 
-        document.getElementById('cap-nhat-luc-duno').innerHTML = `<span class="text-rose-600 font-bold">Lỗi đồng bộ: ${err.message}</span>`; 
+        document.getElementById('cap-nhat-luc-duno').innerHTML = `<span class="text-rose-600 font-bold">L?i ??ng b?: ${err.message}</span>`; 
     }
 }
 
@@ -1587,7 +1614,7 @@ function khoiTaoBangInTB() {
     let columnsInTB = [...finalColumnsGlobal];
     columnsInTB[0] = {
         data: null, 
-        title: `<div class="flex flex-col items-center justify-center gap-1"><span class="text-[9px] font-black uppercase text-purple-700">Chọn in</span><input type="checkbox" id="chk-master-in" class="w-4.5 h-4.5 cursor-pointer accent-purple-600 rounded" title="Chọn tất cả danh sách đang lọc"></div>`, 
+        title: `<div class="flex flex-col items-center justify-center gap-1"><span class="text-[9px] font-black uppercase text-purple-700">Ch?n in</span><input type="checkbox" id="chk-master-in" class="w-4.5 h-4.5 cursor-pointer accent-purple-600 rounded" title="Ch?n t?t c? danh s?ch ?ang l?c"></div>`, 
         orderable: false, searchable: false, className: 'text-center w-10 align-middle',
         render: function(data, type, row) { 
             let maKH = cotMaKH ? row[cotMaKH] : null; 
@@ -1604,11 +1631,11 @@ function khoiTaoBangInTB() {
         pageLength: 50, 
         lengthMenu: [[50, 100, 200, 500], [50, 100, 200, 1000]],
         language: { 
-            search: "Tìm kiếm nhanh:", 
-            lengthMenu: "Hiện _MENU_ dòng", 
-            info: "Khách hàng từ _START_ – _END_ / Tổng số _TOTAL_", 
-            zeroRecords: "Không tìm thấy khách hàng nào để in sếp ơi!", 
-            paginate: { next: "Sau »", previous: "« Trước" } 
+            search: "T?m ki?m nhanh:", 
+            lengthMenu: "Hi?n _MENU_ d?ng", 
+            info: "Kh?ch h?ng t? _START_ ? _END_ / T?ng s? _TOTAL_", 
+            zeroRecords: "Kh?ng t?m th?y kh?ch h?ng n?o ?? in s?p ?i!", 
+            paginate: { next: "Sau ?", previous: "? Tr??c" } 
         },
         scrollX: false, 
         autoWidth: false, 
@@ -1629,7 +1656,7 @@ function khoiTaoBangInTB() {
     });
 }
 
-// BỘ LỌC CHO BẢNG IN THÔNG BÁO NỢ ĐỘC LẬP
+// B? L?C CHO B?NG IN TH?NG B?O N? ??C L?P
 $(document).ready(function() {
     $('#sort-tram-in').on('change', function() { 
         if ($(this).is(':checked')) { 
@@ -1756,55 +1783,20 @@ function inBaoCaoDuNo() {
 }
 
 function taoFormLien(tenLien, ngayIn, data) {
-    return `
-    <div class="lien-thong-bao">
-        <div style="font-weight:bold; font-size:11px; font-style:italic; margin-bottom:4px;">${tenLien}</div>
-        <table style="width:100%; border:none; border-collapse:collapse; margin-bottom:6px;">
-            <tr>
-                <td style="width:42%; vertical-align:top; text-align:center; border:none; padding:0 4px 0 0;">
-                    <div style="font-size:10px; font-weight:normal; line-height:1.3;">CÔNG TY ĐIỆN LỰC HƯNG YÊN</div>
-                    <div style="font-size:11.5px; font-weight:bold; text-decoration:underline; line-height:1.3;">ĐIỆN LỰC TIỀN HẢI</div>
-                </td>
-                <td style="width:58%; vertical-align:top; text-align:center; border:none; padding:0 0 0 4px;">
-                    <div style="font-size:10.5px; font-weight:bold; line-height:1.3;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
-                    <div style="font-size:10.5px; font-weight:bold; text-decoration:underline; font-style:italic; line-height:1.3;">Độc lập - Tự do - Hạnh phúc</div>
-                    <div style="font-size:10px; font-style:italic; text-align:right; margin-top:2px;">Tiền Hải, ${ngayIn}</div>
-                </td>
-            </tr>
-        </table>
-        <div style="text-align:center; font-size:13px; font-weight:bold; margin:6px 0; line-height:1.3;">THÔNG BÁO THANH TOÁN TIỀN ĐIỆN,<br>THÔNG BÁO NGỪNG CẤP ĐIỆN</div>
-        <p style="margin:3px 0; font-size:11.5px; line-height:1.3;"><u><i>Kính gửi</i></u>: Ông (bà): <b>${data.ten} - ${data.sdt}</b></p>
-        <p style="margin:3px 0; font-size:11.5px; line-height:1.3;">Địa chỉ: <b>${data.diaChi}</b></p>
-        <p style="margin:3px 0; font-size:11.5px; line-height:1.3;">Số cột: <b>${data.cot}</b>, No: <b>${data.cto}</b>, Trạm: <b>${data.tram}</b></p>
-        <p style="text-align:justify; margin-top:5px; margin-bottom:0; line-height:1.3; font-size:11.5px;">&nbsp;&nbsp;&nbsp;&nbsp;- Căn cứ Luật Điện lực số 61/2024/QH15 đã được Quốc hội nước Cộng hoà xã hội chủ nghĩa Việt Nam thông qua ngày 30/11/2024;<br>&nbsp;&nbsp;&nbsp;&nbsp;- Căn cứ Quy định về điều kiện, trình tự ngừng, giảm mức cung cấp điện được ban hành kèm theo Thông tư số 04/2025/TT-BCT ngày 01/02/2025 của Bộ trưởng Bộ Công thương;<br>&nbsp;&nbsp;&nbsp;&nbsp;- Căn cứ Hợp đồng mua bán điện đã ký kết giữa hai bên, thông báo thanh toán tiền điện lần nhất và số dư nợ tiền điện tính đến ${ngayIn} là: <b>${data.tien} đồng</b> mà quý khách hàng chưa thanh toán mặc dù đã quá thời hạn thoả thuận.</p>
-        <p style="text-align:justify; margin-top:5px; margin-bottom:0; line-height:1.3; font-size:11.5px;">&nbsp;&nbsp;&nbsp;&nbsp;Điện lực Tiền Hải xin gửi tới Quý khách hàng giấy thông báo thanh toán tiền điện lần thứ 2 và đề nghị Quý khách hàng thu xếp để thanh toán cho chúng tôi số dư nợ tiền điện trước <b>${data.ngayHetHan}</b>. Nếu đến hết giờ làm việc ngày <b>${data.ngayHetHan}</b>, Quý khách hàng vẫn chưa thanh toán đầy đủ số tiền điện còn nợ, chúng tôi buộc phải thông báo để quý khách hàng được biết:</p>
-        <p style="text-align:justify; margin:3px 0; line-height:1.3; font-size:11.5px; padding-left:6px;">&nbsp;&nbsp;&nbsp;&nbsp;- <b>Điện lực Tiền Hải sẽ tính lãi chậm trả và phạt vi phạm hợp đồng với mức phạt là 8% giá trị tiền điện phát sinh trong kỳ.</b><br>&nbsp;&nbsp;&nbsp;&nbsp;- Sau ngày ${data.ngayCat}, chúng tôi xin phép được tạm ngừng cung cấp điện cho Quý khách hàng.<br>&nbsp;&nbsp;&nbsp;&nbsp;- Lý do ngừng cấp điện: Do Quý Khách hàng chưa thanh toán tiền điện đúng thời hạn đã thoả thuận trong Hợp đồng.<br>&nbsp;&nbsp;&nbsp;&nbsp;- Thời hạn dự kiến đóng điện: Sau khi Quý khách đã thanh toán đầy đủ tiền điện; tiền lãi của số tiền chậm trả, phạt vi phạm hợp đồng và chi phí đóng, cắt điện.</p>
-        <p style="margin-top:5px; line-height:1.3; font-size:11.5px;">&nbsp;&nbsp;&nbsp;&nbsp;Đề nghị Quý khách hàng có kế hoạch chủ động trong thời gian mất điện trên.<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Xin trân trọng cảm ơn!</b></p>
-        <div style="position:absolute; bottom:5mm; left:10mm; right:10mm; display:flex; justify-content:space-between; text-align:center; height:90px;">
-            <div style="width:32%; position:relative;">
-                <p style="font-weight:bold; margin:0 0 2px 0; font-size:11.5px;">Người nhận thông báo</p>
-                <p style="font-style:italic; margin:0; font-size:10px;">(Ký và ghi rõ họ tên)</p>
-            </div>
-            <div style="width:32%; position:relative;">
-                <p style="font-weight:bold; margin:0 0 2px 0; font-size:11.5px;">Người gửi thông báo</p>
-                <p style="font-weight:bold; margin:0; font-size:11.5px; position:absolute; bottom:0; width:100%;">${data.nguoiGui}</p>
-            </div>
-            <div style="width:32%; position:relative;">
-                <p style="font-weight:bold; margin:0 0 2px 0; font-size:11.5px; line-height:1.2;">${data.tieuDeLanhDao}</p>
-                <p style="font-weight:bold; margin:0; font-size:11.5px; position:absolute; bottom:0; width:100%;">${data.lanhDao}</p>
-            </div>
-        </div>
-    </div>`;
+    return `<div class="lien-thong-bao"><div style="font-weight:bold; font-size:11px; font-style:italic; margin-bottom:4px;">${tenLien}</div><table style="width:100%; border:none; border-collapse:collapse; margin-bottom:6px;"><tr><td style="width:42%; vertical-align:top; text-align:center; border:none; padding:0 4px 0 0;"><div style="font-size:11px; font-weight:normal; line-height:1.3;">CÔNG TY ĐIỆN LỰC HƯNG YÊN</div><div style="font-size:12.5px; font-weight:bold; text-decoration:underline; line-height:1.3;">ĐIỆN LỰC TIỀN HẢI</div></td><td style="width:58%; vertical-align:top; text-align:center; border:none; padding:0 0 0 4px;"><div style="font-size:11.5px; font-weight:bold; line-height:1.3;">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</div><div style="font-size:11.5px; font-weight:bold; text-decoration:underline; font-style:italic; line-height:1.3;">Độc lập - Tự do - Hạnh phúc</div><div style="font-size:11px; font-style:italic; text-align:right; margin-top:2px;">Tiền Hải, ${ngayIn}</div></td></tr></table><div style="text-align:center; font-size:14px; font-weight:bold; margin:8px 0; line-height:1.4;">THÔNG BÁO THANH TOÁN TIỀN ĐIỆN,<br>THÔNG BÁO NGỪNG CẤP ĐIỆN</div><p style="margin:4px 0; font-size:12px; line-height:1.4;"><u><i>Kính gửi</i></u>: Ông (bà): <b>${data.ten} - ${data.sdt}</b></p><p style="margin:4px 0; font-size:12px; line-height:1.4;">Địa chỉ: <b>${data.diaChi}</b></p><p style="margin:4px 0; font-size:12px; line-height:1.4;">Số cột: <b>${data.cot}</b>, No: <b>${data.cto}</b>, Trạm: <b>${data.tram}</b></p><p style="text-align:justify; margin-top:6px; margin-bottom:0; line-height:1.4; font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;- Căn cứ luật điện lực số 61/2024/QH15 đã được Quốc hội nước Cộng hoà xã hội chủ nghĩa Việt Nam thông qua ngày 30/11/2024;<br>&nbsp;&nbsp;&nbsp;&nbsp;- Căn cứ Quy định về điều kiện, trình tự ngừng, giảm mức cung cấp điện được ban hành kèm theo Thông tư số 04/2025/TT-BCT ngày 01/02/2025 của Bộ trưởng Bộ Công thương;<br>&nbsp;&nbsp;&nbsp;&nbsp;- Căn cứ Hợp đồng mua bán điện đã ký kết giữa hai bên, thông báo thanh toán tiền điện lần nhất và số dư nợ tiền điện tính đến ${ngayIn} là: <b>${data.tien} đồng</b> mà quý khách hàng chưa thanh toán mặc dù đã quá thời hạn thoả thuận.</p><p style="text-align:justify; margin-top:6px; margin-bottom:0; line-height:1.4; font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;Điện lực Tiền Hải xin gửi tới Quý khách hàng giấy thông báo thanh toán tiền điện lần thứ 2 và đề nghị Quý khách hàng thu xếp để thanh toán cho chúng tôi số dư nợ tiền điện trước <b>${data.ngayHetHan}</b>. Nếu đến hết giờ làm việc ngày <b>${data.ngayHetHan}</b>, Quý khách hàng vẫn chưa thanh toán đầy đủ số tiền điện còn nợ, chúng tôi buộc phải thông báo để quý khách hàng được biết:</p><p style="text-align:justify; margin:4px 0; line-height:1.4; font-size:12px; padding-left:8px;">&nbsp;&nbsp;&nbsp;&nbsp;- <b>Điện Lực Tiền Hải sẽ tính lãi chậm trả và phạt vi phạm hợp đồng với mức phạt là 8% giá trị tiền điện phát sinh trong kỳ.</b><br>&nbsp;&nbsp;&nbsp;&nbsp;- Sau ngày ${data.ngayCat}, chúng tôi xin phép được tạm ngừng cấp điện cho Quý khách hàng.<br>&nbsp;&nbsp;&nbsp;&nbsp;- Lý do ngừng cấp điện: Do Quý Khách hàng chưa thanh toán tiền điện đúng thời hạn đã thoả thuận trong Hợp đồng.<br>&nbsp;&nbsp;&nbsp;&nbsp;- Thời hạn dự kiến đóng điện: Sau khi Quý khách đã thanh toán đầy đủ tiền điện; tiền lãi của số tiền chậm trả, phạt vi phạm hợp đồng và chi phí đóng, cắt điện.</p><p style="margin-top:6px; line-height:1.4; font-size:12px;">&nbsp;&nbsp;&nbsp;&nbsp;Đề nghị Quý khách hàng có kế hoạch chủ động trong thời gian mất điện trên.<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Xin trân trọng cảm ơn!</b></p><div style="position:absolute; bottom:5mm; left:10mm; right:10mm; display:flex; justify-content:space-between; text-align:center; height:100px;"><div style="width:32%; position:relative;"><p style="font-weight:bold; margin:0 0 2px 0; font-size:12px;">Người nhận thông báo</p><p style="font-style:italic; margin:0; font-size:11px;">(Ký và ghi rõ họ tên)</p></div><div style="width:32%; position:relative;"><p style="font-weight:bold; margin:0 0 2px 0; font-size:12px;">Người gửi thông báo</p><p style="font-weight:bold; margin:0; font-size:12px; position:absolute; bottom:0; width:100%;">${data.nguoiGui}</p></div><div style="width:32%; position:relative;"><p style="font-weight:bold; margin:0 0 2px 0; font-size:12px; line-height:1.2;">${data.tieuDeLanhDao}</p><p style="font-weight:bold; margin:0; font-size:12px; position:absolute; bottom:0; width:100%;">${data.lanhDao}</p></div></div></div>`;
 }
 
 function inThongBaoTienDien() {
     if (!dataTableInTB) { alert("Bảng dữ liệu in chưa sẵn sàng!"); return; }
     
     let recordsToPrint = [];
-    dataTableInTB.$('.chk-in-no:checked').each(function() {
-        let tr = $(this).closest('tr');
-        let rowData = dataTableInTB.row(tr).data();
-        recordsToPrint.push(rowData);
+    
+    dataTableInTB.rows({ search: 'applied' }).every(function() {
+        let rowNode = this.node();
+        let chk = rowNode ? $(rowNode).find('.chk-in-no') : $();
+        if (chk.length && chk.is(':checked')) {
+            recordsToPrint.push(this.data());
+        }
     });
     
     if (recordsToPrint.length === 0) { 
