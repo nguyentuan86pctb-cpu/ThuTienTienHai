@@ -1254,11 +1254,34 @@ function moZaloSauKhiCopy(msg, isMobile) {
     });
 }
 
+async function taiJsonDuNo() {
+    const stamp = Date.now();
+    const urls = [
+        `/data_duno.json?t=${stamp}`,
+        `https://cdn.jsdelivr.net/gh/nguyentuan86pctb-cpu/ThuTienTienHai@main/data_duno.json?t=${stamp}`,
+        `https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/data_duno.json?t=${stamp}`
+    ];
+    let lastError = '';
+
+    for (const url of urls) {
+        try {
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) {
+                lastError = `${url} -> HTTP ${res.status}`;
+                continue;
+            }
+            return await res.json();
+        } catch (error) {
+            lastError = `${url} -> ${error.message || error}`;
+        }
+    }
+
+    throw new Error(`Khong tai duoc data_duno.json. ${lastError}`);
+}
+
 async function taiDuLieuDuNo() {
     try {
-        const res = await fetch(`https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/data_duno.json?t=${Date.now()}`);
-        if (!res.ok) throw new Error("Chưa có data_duno.json trên Github sếp ơi!");
-        const json = await res.json();
+        const json = await taiJsonDuNo();
         let rawRecords = json.du_lieu || [];
         const records = rawRecords.filter(r => {
             let ma = String(docGiaTriTheoCot(r, ['ma khach hang', 'ma kh']) || '').trim();
