@@ -1259,9 +1259,9 @@ function moZaloSauKhiCopy(msg, isMobile) {
 async function taiJsonDuNo() {
     const stamp = Date.now();
     const urls = [
-        `/data_duno.json?t=${stamp}`,
-        `https://cdn.jsdelivr.net/gh/nguyentuan86pctb-cpu/ThuTienTienHai@main/data_duno.json?t=${stamp}`,
-        `https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/data_duno.json?t=${stamp}`
+        // Luon doc du lieu moi tu GitHub, khong lay file data tren Vercel.
+        `https://raw.githubusercontent.com/nguyentuan86pctb-cpu/ThuTienTienHai/main/data_duno.json?t=${stamp}`,
+        `https://cdn.jsdelivr.net/gh/nguyentuan86pctb-cpu/ThuTienTienHai@main/data_duno.json?t=${stamp}`
     ];
     let lastError = '';
 
@@ -2030,7 +2030,11 @@ $('#bang-tong-hop').on('click', '.btn-xem-tnv', function() {
 
 // Khởi chạy ngay khi mở web
 setupChuKyIn();
-khoiDongDangNhap(); 
+khoiDongDangNhap();
+// Kiem tra nguon GitHub moi 30 phut; giao dien dang mo se tu tai lai du lieu.
+setInterval(() => {
+    if (currentUser && !document.hidden) taiDuLieuDuNo();
+}, 30 * 60 * 1000);
 kiemTraNgayKhoa();
 </script>
 </body>
