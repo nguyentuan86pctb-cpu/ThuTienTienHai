@@ -254,12 +254,20 @@
         }
         
         /* Harmonious row state highlights */
-        tr.chung-sdt td { 
-            background-color: #fef3c7 !important; /* Soft Amber */
-            border-left: 4px solid #f59e0b !important;
-        } 
-        tr.chung-sdt-nhom-chan td { background-color: #fef3c7 !important; }
-        tr.chung-sdt-nhom-le td { background-color: #ffedd5 !important; }
+        tr.chung-sdt {
+            --chung-sdt-bg: #fef3c7;
+            --chung-sdt-accent: #d97706;
+        }
+        tr.chung-sdt td {
+            background-color: var(--chung-sdt-bg) !important;
+            border-left: 4px solid var(--chung-sdt-accent) !important;
+        }
+        tr.chung-sdt-nhom-0 { --chung-sdt-bg: #fef3c7; --chung-sdt-accent: #d97706; }
+        tr.chung-sdt-nhom-1 { --chung-sdt-bg: #e0f2fe; --chung-sdt-accent: #0284c7; }
+        tr.chung-sdt-nhom-2 { --chung-sdt-bg: #dcfce7; --chung-sdt-accent: #16a34a; }
+        tr.chung-sdt-nhom-3 { --chung-sdt-bg: #ede9fe; --chung-sdt-accent: #7c3aed; }
+        tr.chung-sdt-nhom-4 { --chung-sdt-bg: #ffe4e6; --chung-sdt-accent: #e11d48; }
+        tr.chung-sdt-nhom-5 { --chung-sdt-bg: #cffafe; --chung-sdt-accent: #0891b2; }
         tr.co-ghi-chu td { 
             background-color: #ffe4e6 !important; /* Soft Rose */
             border-left: 4px solid #f43f5e !important;
@@ -1160,6 +1168,7 @@ let tapSDTChung = new Set();
 let thuTuNhomSDT = new WeakMap();
 let thuTuBanDau = new WeakMap();
 let mauTheoSDT = new Map();
+const DANH_SACH_LOP_MAU_SDT = Array.from({ length: 6 }, (_, index) => `chung-sdt-nhom-${index}`);
 
 $.fn.dataTable.ext.type.order['natural-asc'] = function (a, b) { 
     return String(a).localeCompare(String(b), undefined, {numeric: true, sensitivity: 'base'}); 
@@ -1243,7 +1252,7 @@ function taoChiMucSDT(records) {
     danhSachSDTChung.sort();
     const thuTuTheoSDT = new Map(danhSachSDTChung.map((sdt, index) => [sdt, index]));
     danhSachSDTChung.forEach((sdt, index) => {
-        mauTheoSDT.set(sdt, index % 2 === 0 ? 'chung-sdt-nhom-chan' : 'chung-sdt-nhom-le');
+        mauTheoSDT.set(sdt, DANH_SACH_LOP_MAU_SDT[index % DANH_SACH_LOP_MAU_SDT.length]);
     });
     records.forEach(row => {
         const sdt = sdtChuanTheoBanGhi.get(row);
@@ -1551,7 +1560,7 @@ async function taiDuLieuDuNo() {
         });
 
         function capNhatMauSDT() {
-            $('#bang-duno tbody tr').removeClass('chung-sdt chung-sdt-nhom-chan chung-sdt-nhom-le');
+            $('#bang-duno tbody tr').removeClass(`chung-sdt ${DANH_SACH_LOP_MAU_SDT.join(' ')}`);
             if (locChungSDT && cotSDT_global) {
                 dataTableDuNo.rows({ page: 'current' }).every(function() { 
                     const rowData = this.data();
