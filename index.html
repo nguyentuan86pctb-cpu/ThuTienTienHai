@@ -663,12 +663,12 @@
             .thong-tin-khach-hang p { margin: 0 0 0.8mm; line-height: 1.14; overflow-wrap: anywhere; }
             .noi-dung-mau-moi p { margin: 0 0 1.25mm; text-align: justify; text-indent: 5mm; line-height: 1.13; }
             .noi-dung-mau-moi p.khong-thut-dau { text-indent: 0; }
-            .vung-ky-thong-bao { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 4mm; flex: 1 0 27mm; min-height: 27mm; margin-top: 1mm; text-align: center; box-sizing: border-box; }
+            .vung-ky-thong-bao { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 4mm; flex: 1 0 31mm; min-height: 31mm; margin-top: 1mm; text-align: center; box-sizing: border-box; }
             .vung-ky-thong-bao p { margin: 0; line-height: 1.13; }
             .vung-ky-thong-bao .tieu-de-ky { font-weight: bold; }
             .vung-ky-thong-bao .huong-dan-ky { font-size: 8.2pt; font-style: italic; }
-            .vung-ky-thong-bao .ten-nguoi-ky { margin-top: 12mm; font-weight: bold; }
-            .vung-ky-thong-bao .gio-nhan { margin-top: 1mm; }
+            .vung-ky-thong-bao .ten-nguoi-ky { margin-top: 16mm; font-weight: bold; }
+            .vung-ky-thong-bao .gio-nhan { margin-top: 16mm; }
             .duong-cat-doc { border-left: 1px dashed #666; margin: 0; flex-shrink: 0; position: relative; align-self: stretch; }
             .duong-cat-doc::after { content: "\2702"; position: absolute; top: 50%; left: -9px; font-size: 18px; color: #666; background: #fff; padding: 5px 0; transform: translateY(-50%); }
         }
@@ -1997,8 +1997,7 @@ function taoFormLien(tenLien, data) {
                 <p class="ghi-chu-thong-bao">(Nếu Quý khách hàng đã thanh toán, vui lòng bỏ qua giấy thông báo này!)</p>
 
                 <div class="thong-tin-khach-hang">
-                    <p>Kính gửi khách hàng: <b>${ten}</b></p>
-                    <p style="padding-left:25mm;">(SĐT: <b>${sdt}</b>)</p>
+                    <p>Kính gửi khách hàng: <b>${ten}</b> - SĐT: <b>${sdt}</b></p>
                     <p>Địa chỉ sử dụng điện: <b>${diaChi}</b>, Mã khách hàng <b>${maKH}</b></p>
                     <p>N0: <b>${cto}</b>, số cột: <b>${cot}</b>, TBA: <b>${tram}</b></p>
                 </div>
