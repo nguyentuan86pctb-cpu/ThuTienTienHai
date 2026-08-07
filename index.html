@@ -667,8 +667,9 @@
             .vung-ky-thong-bao p { margin: 0; line-height: 1.13; }
             .vung-ky-thong-bao .tieu-de-ky { font-weight: bold; }
             .vung-ky-thong-bao .huong-dan-ky { font-size: 8.2pt; font-style: italic; }
-            .vung-ky-thong-bao .ten-nguoi-ky { margin-top: 1mm; font-weight: bold; }
-            .vung-ky-thong-bao .ten-lanh-dao { margin-top: 16mm; }
+            .vung-ky-thong-bao .cot-ky-thong-bao { display: flex; flex-direction: column; min-width: 0; }
+            .vung-ky-thong-bao .ten-nguoi-ky { margin-top: auto; font-weight: bold; }
+            .vung-ky-thong-bao .dong-sdt-nguoi-gui, .vung-ky-thong-bao .dong-dem-sdt { min-height: 3.8mm; margin-top: 0.5mm; font-size: 8.2pt; line-height: 1.1; font-weight: bold; }
             .vung-ky-thong-bao .gio-nhan { margin-top: 1mm; }
             .duong-cat-doc { border-left: 1px dashed #666; margin: 0; flex-shrink: 0; position: relative; align-self: stretch; }
             .duong-cat-doc::after { content: "\2702"; position: absolute; top: 50%; left: -9px; font-size: 18px; color: #666; background: #fff; padding: 5px 0; transform: translateY(-50%); }
@@ -961,6 +962,7 @@
                         <div class="flex flex-col gap-1">
                             <span class="font-extrabold text-slate-600 text-xs uppercase tracking-wider">4. Người gửi thông báo:</span>
                             <input type="text" id="input-nguoi-gui" placeholder="Gõ tên thu ngân..." class="bg-white border border-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl shadow-sm focus:border-evnBlue outline-none text-xs md:text-sm border-l-4 border-l-blue-500">
+                            <input type="tel" id="input-sdt-nguoi-gui" placeholder="SĐT người gửi..." class="bg-white border border-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl shadow-sm focus:border-evnBlue outline-none text-xs md:text-sm border-l-4 border-l-blue-500">
                         </div>
                         <div class="flex flex-col gap-1">
                             <span class="font-extrabold text-slate-600 text-xs uppercase tracking-wider">5. Lãnh đạo ký:</span>
@@ -1973,6 +1975,7 @@ function taoFormLien(tenLien, data) {
     const tram = thoatHtmlThongBao(data.tram);
     const tien = thoatHtmlThongBao(data.tien);
     const nguoiGui = thoatHtmlThongBao(data.nguoiGui);
+    const sdtNguoiGui = thoatHtmlThongBao(data.sdtNguoiGui);
     const lanhDao = thoatHtmlThongBao(data.lanhDao);
     const gioCat = thoatHtmlThongBao(data.gioCat || '……');
     const phutCat = thoatHtmlThongBao(data.phutCat || '……');
@@ -2008,7 +2011,7 @@ function taoFormLien(tenLien, data) {
                     <p>Căn cứ Thông tư số 04/2025/TT-BCT ngày 01 tháng 02 năm 2025 của Bộ Công Thương quy định điều kiện, trình tự ngừng, giảm mức cung cấp điện;</p>
                     <p>Căn cứ Hợp đồng mua bán điện đã ký kết giữa hai bên, thông báo thanh toán tiền điện lần thứ nhất và số dư nợ tiền điện tính đến ${data.ngayIn} là <b>${tien} đồng</b> mà Quý khách hàng chưa thanh toán.</p>
                     <p>Điện lực Tiền Hải xin gửi tới Quý khách hàng Thông báo thanh toán tiền điện lần thứ 2 và đề nghị Quý khách hàng thu xếp thanh toán cho chúng tôi số dư nợ tiền điện trên, trước ${data.ngayHetHan}. Quý khách hàng có thể thanh toán qua ứng dụng EVNCSKH hoặc thanh toán qua ngân hàng, các tổ chức trung gian thu hộ tiền điện.</p>
-                    <p>Nếu đến hết giờ làm việc ${data.ngayHetHan}, Quý khách hàng vẫn chưa thanh toán đầy đủ số tiền điện còn nợ, chúng tôi buộc phải thông báo để Quý khách hàng được biết:</p>
+                    <p>Nếu đến hết giờ làm việc ${data.ngayIn}, Quý khách hàng vẫn chưa thanh toán đầy đủ số tiền điện còn nợ, chúng tôi buộc phải thông báo để Quý khách hàng được biết:</p>
                     <p>Bắt đầu từ <b>${gioCat}</b> giờ <b>${phutCat}</b> phút ${data.ngayCat}, chúng tôi sẽ tạm ngừng cấp điện tại địa điểm công tơ đang bán điện cho Quý khách hàng.</p>
                     <p><b>Lý do ngừng cấp điện:</b> Do Quý khách hàng chưa thanh toán tiền điện đúng thời hạn đã thỏa thuận trong Hợp đồng mua bán điện.</p>
                     <p><b>Thời gian dự kiến đóng điện:</b> Sau khi Quý khách hàng đã thanh toán đầy đủ tiền điện, tiền lãi của số tiền chậm trả, tiền phạt vi phạm hợp đồng <b>8% giá trị vi phạm</b> và các chi phí liên quan (trừ trường hợp có thỏa thuận khác).</p>
@@ -2023,15 +2026,17 @@ function taoFormLien(tenLien, data) {
                     <p class="huong-dan-ky">(Ký tên và ghi rõ họ tên,<br>ngày, giờ nhận TB)</p>
                     <p class="gio-nhan">……giờ ……phút ngày……</p>
                 </div>
-                <div>
+                <div class="cot-ky-thong-bao">
                     <p class="tieu-de-ky">Người gửi thông báo</p>
                     <p class="huong-dan-ky">(Ký và ghi rõ họ tên)</p>
                     <p class="ten-nguoi-ky">${nguoiGui}</p>
+                    <p class="dong-sdt-nguoi-gui">${sdtNguoiGui ? `SĐT: ${sdtNguoiGui}` : '&nbsp;'}</p>
                 </div>
-                <div>
+                <div class="cot-ky-thong-bao">
                     <p class="tieu-de-ky">${data.tieuDeLanhDao}</p>
                     <p class="huong-dan-ky">(Ký và ghi rõ họ tên)</p>
-                    <p class="ten-nguoi-ky ten-lanh-dao">${lanhDao}</p>
+                    <p class="ten-nguoi-ky">${lanhDao}</p>
+                    <p class="dong-dem-sdt">&nbsp;</p>
                 </div>
             </div>
         </div>`;
@@ -2057,6 +2062,7 @@ function inThongBaoTienDien() {
 
     // Lấy thông tin từ giao diện
     let nguoiGui = document.getElementById('input-nguoi-gui').value.trim();
+    let sdtNguoiGui = document.getElementById('input-sdt-nguoi-gui').value.trim();
     let lanhDao = document.getElementById('select-lanh-dao').value;
     let tieuDeLanhDao = (lanhDao === "Trương Hùng Cường") 
                         ? "TRƯỞNG ĐIỆN LỰC" 
@@ -2098,7 +2104,8 @@ function inThongBaoTienDien() {
             cto: cleanSo(docGiaTriTheoCot(rowData, ['so cto', 'so cong to', 'cto'])) || '--', 
             sdt: sdtClean, 
             tien: (cotTien_global ? rowData[cotTien_global] : docGiaTriTheoCot(rowData, ['tong tien', 'so tien', 'no'])) || '0',
-            nguoiGui: nguoiGui, 
+            nguoiGui: nguoiGui,
+            sdtNguoiGui: sdtNguoiGui,
             lanhDao: lanhDao, 
             tieuDeLanhDao: tieuDeLanhDao,
             ngayIn: strNgayIn,
@@ -2131,11 +2138,14 @@ function inThongBaoTienDien() {
 // Lắng nghe sự kiện lưu vào bộ nhớ tạm
 function setupChuKyIn() {
     let savedNguoiGui = localStorage.getItem('evn_nguoi_gui_th');
+    let savedSdtNguoiGui = localStorage.getItem('evn_sdt_nguoi_gui_th');
     let savedLanhDao = localStorage.getItem('evn_lanh_dao_th');
     if (savedNguoiGui) document.getElementById('input-nguoi-gui').value = savedNguoiGui;
+    if (savedSdtNguoiGui) document.getElementById('input-sdt-nguoi-gui').value = savedSdtNguoiGui;
     if (savedLanhDao) document.getElementById('select-lanh-dao').value = savedLanhDao;
 
     $('#input-nguoi-gui').on('input', function() { localStorage.setItem('evn_nguoi_gui_th', this.value); });
+    $('#input-sdt-nguoi-gui').on('input', function() { localStorage.setItem('evn_sdt_nguoi_gui_th', this.value); });
     $('#select-lanh-dao').on('change', function() { localStorage.setItem('evn_lanh_dao_th', this.value); });
 }
 
