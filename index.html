@@ -667,8 +667,9 @@
             .vung-ky-thong-bao p { margin: 0; line-height: 1.13; }
             .vung-ky-thong-bao .tieu-de-ky { font-weight: bold; }
             .vung-ky-thong-bao .huong-dan-ky { font-size: 8.2pt; font-style: italic; }
-            .vung-ky-thong-bao .ten-nguoi-ky { margin-top: 16mm; font-weight: bold; }
-            .vung-ky-thong-bao .gio-nhan { margin-top: 16mm; }
+            .vung-ky-thong-bao .ten-nguoi-ky { margin-top: 1mm; font-weight: bold; }
+            .vung-ky-thong-bao .ten-lanh-dao { margin-top: 16mm; }
+            .vung-ky-thong-bao .gio-nhan { margin-top: 1mm; }
             .duong-cat-doc { border-left: 1px dashed #666; margin: 0; flex-shrink: 0; position: relative; align-self: stretch; }
             .duong-cat-doc::after { content: "\2702"; position: absolute; top: 50%; left: -9px; font-size: 18px; color: #666; background: #fff; padding: 5px 0; transform: translateY(-50%); }
         }
@@ -2030,7 +2031,7 @@ function taoFormLien(tenLien, data) {
                 <div>
                     <p class="tieu-de-ky">${data.tieuDeLanhDao}</p>
                     <p class="huong-dan-ky">(Ký và ghi rõ họ tên)</p>
-                    <p class="ten-nguoi-ky">${lanhDao}</p>
+                    <p class="ten-nguoi-ky ten-lanh-dao">${lanhDao}</p>
                 </div>
             </div>
         </div>`;
