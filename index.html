@@ -640,6 +640,7 @@
             #in-header { display: block !important; text-align: center; margin-bottom: 10px; }
             #in-dong-tong { display: block !important; }
             #vung-in-thong-bao { display: none; }
+            body.dang-in-thong-bao > *:not(#vung-in-thong-bao) { display: none !important; }
             body.dang-in-thong-bao * { visibility: hidden !important; }
             body.dang-in-thong-bao #vung-in-thong-bao, body.dang-in-thong-bao #vung-in-thong-bao * { visibility: visible !important; }
             body.dang-in-thong-bao #vung-in-thong-bao { display: block !important; position: absolute; top: 0; left: 0; width: 100%; background: #fff; }
@@ -979,6 +980,8 @@
                         <div class="flex flex-col gap-1">
                             <span class="font-extrabold text-slate-600 text-xs uppercase tracking-wider text-orange-600">6b. Hạn thanh toán:</span>
                             <input type="date" id="input-ngay-het-han" class="bg-white border border-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl shadow-sm focus:border-evnBlue outline-none text-xs md:text-sm border-l-4 border-l-orange-500" title="Bỏ trống sẽ lấy trùng Ngày In">
+                            <span class="font-extrabold text-slate-600 text-xs uppercase tracking-wider text-amber-700 mt-1">6c. Nếu đến hết giờ:</span>
+                            <input type="date" id="input-ngay-het-gio" class="bg-white border border-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl shadow-sm focus:border-evnBlue outline-none text-xs md:text-sm border-l-4 border-l-amber-500" title="Ngày dùng trong câu Nếu đến hết giờ làm việc; bỏ trống sẽ lấy Ngày In">
                         </div>
                         <div class="flex flex-col gap-1">
                             <span class="font-extrabold text-slate-600 text-xs uppercase tracking-wider text-rose-600">7. Thời điểm tạm dừng cấp điện:</span>
@@ -2011,7 +2014,7 @@ function taoFormLien(tenLien, data) {
                     <p>Căn cứ Thông tư số 04/2025/TT-BCT ngày 01 tháng 02 năm 2025 của Bộ Công Thương quy định điều kiện, trình tự ngừng, giảm mức cung cấp điện;</p>
                     <p>Căn cứ Hợp đồng mua bán điện đã ký kết giữa hai bên, thông báo thanh toán tiền điện lần thứ nhất và số dư nợ tiền điện tính đến ${data.ngayIn} là <b>${tien} đồng</b> mà Quý khách hàng chưa thanh toán.</p>
                     <p>Điện lực Tiền Hải xin gửi tới Quý khách hàng Thông báo thanh toán tiền điện lần thứ 2 và đề nghị Quý khách hàng thu xếp thanh toán cho chúng tôi số dư nợ tiền điện trên, trước ${data.ngayHetHan}. Quý khách hàng có thể thanh toán qua ứng dụng EVNCSKH hoặc thanh toán qua ngân hàng, các tổ chức trung gian thu hộ tiền điện.</p>
-                    <p>Nếu đến hết giờ làm việc ${data.ngayIn}, Quý khách hàng vẫn chưa thanh toán đầy đủ số tiền điện còn nợ, chúng tôi buộc phải thông báo để Quý khách hàng được biết:</p>
+                    <p>Nếu đến hết giờ làm việc ${data.ngayHetGio}, Quý khách hàng vẫn chưa thanh toán đầy đủ số tiền điện còn nợ, chúng tôi buộc phải thông báo để Quý khách hàng được biết:</p>
                     <p>Bắt đầu từ <b>${gioCat}</b> giờ <b>${phutCat}</b> phút ${data.ngayCat}, chúng tôi sẽ tạm ngừng cấp điện tại địa điểm công tơ đang bán điện cho Quý khách hàng.</p>
                     <p><b>Lý do ngừng cấp điện:</b> Do Quý khách hàng chưa thanh toán tiền điện đúng thời hạn đã thỏa thuận trong Hợp đồng mua bán điện.</p>
                     <p><b>Thời gian dự kiến đóng điện:</b> Sau khi Quý khách hàng đã thanh toán đầy đủ tiền điện, tiền lãi của số tiền chậm trả, tiền phạt vi phạm hợp đồng <b>8% giá trị vi phạm</b> và các chi phí liên quan (trừ trường hợp có thỏa thuận khác).</p>
@@ -2068,18 +2071,21 @@ function inThongBaoTienDien() {
                         ? "TRƯỞNG ĐIỆN LỰC" 
                         : "KT.TRƯỞNG ĐIỆN LỰC<br>PHÓ TRƯỞNG ĐIỆN LỰC";
 
-    // Xử lý Ngày In, Ngày Hết Hạn và Ngày Cắt
+    // Xử lý Ngày In, Hạn thanh toán, ngày "Nếu đến hết giờ" và Ngày Cắt
     let valNgayIn = document.getElementById('input-ngay-in').value;
     let valNgayHetHan = document.getElementById('input-ngay-het-han').value;
+    let valNgayHetGio = document.getElementById('input-ngay-het-gio').value;
     let valNgayCat = document.getElementById('input-ngay-cat').value;
     let valGioCat = document.getElementById('input-gio-cat').value;
     
     let dateIn = valNgayIn ? new Date(valNgayIn) : new Date(); // Mặc định là hôm nay
     let dateHetHan = valNgayHetHan ? new Date(valNgayHetHan) : new Date(dateIn.getTime()); // Mặc định bằng ngày in
+    let dateHetGio = valNgayHetGio ? new Date(valNgayHetGio) : new Date(dateIn.getTime()); // Giữ hành vi cũ nếu bỏ trống
     let dateCat = valNgayCat ? new Date(valNgayCat) : new Date(dateIn.getTime() + 86400000); // Mặc định cộng thêm 1 ngày so với ngày in
     
     let strNgayIn = `ngày <span style="font-weight:bold;">${dateIn.getDate().toString().padStart(2,'0')}</span> tháng <span style="font-weight:bold;">${dateIn.getMonth() + 1}</span> năm <span style="font-weight:bold;">${dateIn.getFullYear()}</span>`;
     let strNgayHetHan = `ngày <span style="font-weight:bold;">${dateHetHan.getDate().toString().padStart(2,'0')}</span> tháng <span style="font-weight:bold;">${dateHetHan.getMonth() + 1}</span> năm <span style="font-weight:bold;">${dateHetHan.getFullYear()}</span>`;
+    let strNgayHetGio = `ngày <span style="font-weight:bold;">${dateHetGio.getDate().toString().padStart(2,'0')}</span> tháng <span style="font-weight:bold;">${dateHetGio.getMonth() + 1}</span> năm <span style="font-weight:bold;">${dateHetGio.getFullYear()}</span>`;
     let strNgayCat = `ngày <b>${dateCat.getDate().toString().padStart(2,'0')}</b> tháng <b>${dateCat.getMonth() + 1}</b> năm <b>${dateCat.getFullYear()}</b>`;
     let [gioCat = '……', phutCat = '……'] = valGioCat ? valGioCat.split(':') : [];
     
@@ -2111,6 +2117,7 @@ function inThongBaoTienDien() {
             ngayIn: strNgayIn,
             ngayCat: strNgayCat,
             ngayHetHan: strNgayHetHan,
+            ngayHetGio: strNgayHetGio,
             gioCat: gioCat,
             phutCat: phutCat
         }; 
