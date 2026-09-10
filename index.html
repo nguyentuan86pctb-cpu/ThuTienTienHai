@@ -670,6 +670,8 @@
             .vung-ky-thong-bao .huong-dan-ky { font-size: 8.2pt; font-style: italic; }
             .vung-ky-thong-bao .cot-ky-thong-bao { display: flex; flex-direction: column; min-width: 0; }
             .vung-ky-thong-bao .ten-nguoi-ky { margin-top: auto; font-weight: bold; }
+            .vung-ky-thong-bao .chu-ky-lanh-dao { display: block; width: 88%; height: 16mm; margin: auto auto 0.6mm; object-fit: contain; transform: translateX(4mm); }
+            .vung-ky-thong-bao .ten-nguoi-ky-co-chu-ky { margin-top: 0; }
             .vung-ky-thong-bao .dong-sdt-nguoi-gui, .vung-ky-thong-bao .dong-dem-sdt { min-height: 3.8mm; margin-top: 0.5mm; font-size: 8.2pt; line-height: 1.1; font-weight: bold; }
             .vung-ky-thong-bao .gio-nhan { margin-top: 1mm; }
             .duong-cat-doc { border-left: 1px dashed #666; margin: 0; flex-shrink: 0; position: relative; align-self: stretch; }
@@ -1982,6 +1984,10 @@ function taoFormLien(tenLien, data) {
     const lanhDao = thoatHtmlThongBao(data.lanhDao);
     const gioCat = thoatHtmlThongBao(data.gioCat || '……');
     const phutCat = thoatHtmlThongBao(data.phutCat || '……');
+    const laVuVanNguyen = data.lanhDao === 'Vũ Văn Nguyên';
+    const chuKyLanhDaoHtml = laVuVanNguyen
+        ? '<img class="chu-ky-lanh-dao" src="assets/chu-ky-vu-van-nguyen.png" alt="Chữ ký Vũ Văn Nguyên">'
+        : '';
 
     return `
         <div class="lien-thong-bao">
@@ -2038,7 +2044,8 @@ function taoFormLien(tenLien, data) {
                 <div class="cot-ky-thong-bao">
                     <p class="tieu-de-ky">${data.tieuDeLanhDao}</p>
                     <p class="huong-dan-ky">(Ký và ghi rõ họ tên)</p>
-                    <p class="ten-nguoi-ky">${lanhDao}</p>
+                    ${chuKyLanhDaoHtml}
+                    <p class="ten-nguoi-ky${laVuVanNguyen ? ' ten-nguoi-ky-co-chu-ky' : ''}">${lanhDao}</p>
                     <p class="dong-dem-sdt">&nbsp;</p>
                 </div>
             </div>
