@@ -1,6 +1,6 @@
 {
-  "cap_nhat_luc": "22/05/2026 16:20:47",
-  "tong_so": 75,
+  "cap_nhat_luc": "29/09/2026 08:50:04",
+  "tong_so": 76,
   "users": [
     {
       "username": "LinhBD3",
@@ -376,6 +376,11 @@
       "username": "TuanNN9",
       "ho_ten": "Nguyễn Ngọc Tuấn",
       "pass_hash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"
+    },
+    {
+      "username": "tet",
+      "ho_ten": "",
+      "pass_hash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
     }
   ]
 }
